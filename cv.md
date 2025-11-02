@@ -4,7 +4,7 @@ title: CV
 permalink: /cv/
 ---
 
-## CV
+
 
 [Download CV (PDF)](assets/pdfs/Xiaokang_Wang_s_CV_for_academic_jobs.pdf)
 
