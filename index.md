@@ -18,8 +18,8 @@ Geometric Analysis and Geometric Flows, epecially the collapsing behavior in the
 ## Publications and Preprints
 
 - **Collapsing Yamabe metrics**, in preparation, 2025.
-- **$\alpha$-Ricci flow on torus** (With Yifan Guo), in preparation, 2025 
-- **$\alpha$- Ricci flow and Geometric Application {I}: Analytic Aspect** (with Anna Cusenza, Yifan Guo, Kuan-Hui Lee, and Michael Womack), in preparation, 2025.
+- **$$\alpha$$-Ricci flow on torus** (With Yifan Guo), in preparation, 2025 
+- **$$\alpha$$- Ricci flow and Geometric Application {I}: Analytic Aspect** (with Anna Cusenza, Yifan Guo, Kuan-Hui Lee, and Michael Womack), in preparation, 2025.
 - **Pluriclosed flow on Oeljeklaus–Toma manifolds** (with J. Streets), in preparation, 2025.
 - **On the structure of locally conformally flat orbifolds and ALE metrics**, in preparation, 2025.
 - **Machine learning and LLM-Boost symbolic regression for predicting Q-gonality of modular curves**, ICML 2025, AI4Math Workshop.
