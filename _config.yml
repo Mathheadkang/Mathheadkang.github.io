@@ -4,3 +4,11 @@ baseurl: ""
 url: "https://Mathheadkang.github.io"
 markdown: kramdown
 theme: minima
+
+# Navigation menu
+header_pages:
+  - index.md
+  - research.md
+  - projects.md
+  - teaching.md
+  - cv.md
