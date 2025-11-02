@@ -5,6 +5,9 @@ url: "https://Mathheadkang.github.io"
 markdown: kramdown
 theme: minima
 
+kramdown:
+  math_engine: mathjax
+
 # Navigation menu
 header_pages:
   - index.md
