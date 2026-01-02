@@ -1,5 +1,5 @@
 ---
 layout: page
-title: Detailed Research
+title: Introduction
 permalink: /research/introduction/
 ---

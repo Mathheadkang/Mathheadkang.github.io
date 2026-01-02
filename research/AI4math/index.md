@@ -1,5 +1,5 @@
 ---
 layout: page
-title: Detailed Research
+title: AI4Math
 permalink: /research/AI4Math/
 ---
