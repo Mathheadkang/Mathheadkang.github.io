@@ -4,14 +4,14 @@ title: Detailed Research
 permalink: /research/expert/
 ---
 
-# Geometry Research Overall
+### Geometry Research Overall
 Broadly speaking, my research interest focuses on understanding special metrics and their moduli spaces on manifolds, motivated by physics and topology. These metrics include [locally conformally flat](https://en.wikipedia.org/wiki/Conformally_flat_manifold) metrics, [Yamabe](https://en.wikipedia.org/wiki/Yamabe_problem) metrics, non-Kähler Hermitian metrics, and hyperbolic type metrics. The tools I use to understand these structures include conformal deformation, collapsing theory of Cheeger-Fukaya-Gromov, nonlinear PDE, and generalized curvature flows with surgeries. My coauthors and I have made progress on some well-known conjectures and discovered some interesting geometric phenomena. 
 
-# Sections
+### Sections
 - [The The Moduli space of locally conformally flat manifolds](#the-moduli-space-of-locally-conformally-flat-manifolds)
 - [Generalized Curvature Flows](#generalized-curvature-flows)
 
-# The Moduli space of locally conformally flat manifolds
+### The Moduli space of locally conformally flat manifolds
 
 ## Sections
 - [Introduction](#1-introduction)
@@ -118,7 +118,7 @@ holds.
 When a uniform positive lower bound $\mu_0>0$ on the Yamabe invariant is assumed, an $\varepsilon$-regularity statement of this type follows from Moser iteration techniques. The conjecture is known to fail in the zero Yamabe constant or $n\geq 5$ regime.
 
 If the above conjecture is established, curvature concentration can occur only at finitely many points, and one expects that the collapsing and gluing phenomena constructed capture the worst-case degenerations in the boundary of $\mathfrak{M}(n,0^+,C_0)$.
-# Generalized Curvature Flows
+### Generalized Curvature Flows
 
 ## Sections
 - [Pluriclosed flow](#2-pluriclosed-flow-on-oeljeklaus--toma-manifolds-with-jeff-d-streets-streets-wang-2025)
@@ -216,6 +216,7 @@ We wish to apply $\alpha$-Ricci flow to [hyperbolic manifolds](https://en.wikipe
 
 **Conjecture**
 Let $M = \mathbb{H}^3/\Gamma$ be a compact hyperbolic 3-manifold, where $\Gamma\subset \operatorname{Isom}(\mathbb{H}^3)$ is a cocompact subgroup. Then, for any $[\alpha]\in H^1(M)$, there exists an unique metric $g_\alpha$ such that, and a representative $\alpha$, such that:
+
 $$\left\{\begin{aligned}
 	&\operatorname{Ric}-\tfrac{1}{4}\alpha\otimes\alpha=-g\\
 	&d^*_g\alpha=0.
