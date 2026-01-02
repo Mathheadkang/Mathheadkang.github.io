@@ -96,7 +96,7 @@ Next, we present a gluing construction of collapsing constant‑scalar‑curvatu
 **Theorem (Via-W, 26)**
 Let $\{(M_i,g_i)\}$ be a $S(n,d,C,D,\delta)$-spectural admissible sequence, $\{N_i,h_i)\}$ be a $S(n,k,C,D,\delta)$-spectural admissible sequence, with corresponding limits as $i\to\infty$, $(X^d, g_\infty)$, $(Y^k,h_\infty)$, with $d,k\geq 3$. Then, for $i$-sufficiently large, there will be a sequence of metrics $(M_i$ $N_i, \hat{g}_i)$, such that:
 - The scalar curvature $R(\hat{g}_i)\equiv 1$;
-- The sequence converges to $(X\wedge Y, l)$ in the Gromov-Hausdorff sense, where $$l|_{X} = g_\infty$$ and $$l|_{Y} = h_\infty$$.
+- The sequence converges to $(X\wedge Y, l)$ in the Gromov-Hausdorff sense, where $l_{X} = g_\infty$ and $l_{Y} = h_\infty$.
 
 ![Collapsing example](collapsing_example.png)
 This yields the first example of degeneration to the wedge sum of two manifolds of different dimensions while preserving the constant-scalar-curvature condition. The degeneration described above can indeed occur in the moduli space $\mathfrak{M}(n,0^+,C_0)$. Unlike the Einstein setting, the Ricci curvature need not be uniformly bounded from below: in our construction the blow-down of the neck region has Ricci curvature tending to $-\infty$. Note that the curvature blow-up in this construction occurs only at isolated points.
@@ -105,10 +105,14 @@ We aim to compactify the moduli space $\mathfrak{M}(n,0^+,C_0)$ and to fully des
 
 **Conjecture** 
 There exist universal constants $C$ and $\varepsilon_0>0$ with the following property. If $(M,g)\in\mathfrak{M}(n,0^+,C_0)$ and for some geodesic ball $B_r$ one has
+
 $$\int_{B_r}\|\operatorname{Ric}\|^{\tfrac{n}{2}}\,dv < \varepsilon_0,$$
+
 then the pointwise bound
+
 $$\sup_{B_{r/2}}\|\operatorname{Ric}\|
         \le \frac{C}{r^2}\Big(\int_{B_r}\|\operatorname{Ric}\|^{\tfrac{n}{2}}\,dv\Big)^{\tfrac{2}{n}}$$
+
 holds.
 
 When a uniform positive lower bound $\mu_0>0$ on the Yamabe invariant is assumed, an $\varepsilon$-regularity statement of this type follows from Moser iteration techniques. The conjecture is known to fail in the zero Yamabe constant or $n\geq 5$ regime.
@@ -121,8 +125,10 @@ If the above conjecture is established, curvature concentration can occur only a
 - [$\alpha$-Ricci flow general theory](#3--ricci-flow-analytic-aspects-with-a-cusenza-y-guo-k-lee-m-womack-in-preperation)
 - [$\alpha$-Ricci flow on torus](#4--ricci-flow-on-torus-with-yifan-guo-in-preperation)
 - [Future work](#5-future-work)
+
 ## 1: Introduction
 Another strand of my research uses generalized curvature flows to address geometric and topological problems. Analogous to Ricci flow, these flows evolve a metric according to curvature and related geometric quantities. In the non-Kähler setting we study the long-time behaviour of the pluriclosed flow on Oeljeklaus--Toma (OT) manifolds, resolving several conjectures motivated by model solutions. For hyperbolic geometry we introduce a new curvature flow, develop the analytic toolkit required for existence, regularity, and surgery, and apply it to topological questions in hyperbolic 3‑manifolds in the spirit of the Geometrization program.
+
 ## 2: Pluriclosed flow on Oeljeklaus--Toma manifolds (with Jeff D. Streets [Streets-Wang 2025](https://arxiv.org/abs/2512.11246)) 
 
 The [Inoue surfaces](https://en.wikipedia.org/wiki/Inoue_surface) of type $S^0$ provide fundamental examples of compact complex surfaces in Kodaira class VII that are non‑Kähler. Oeljeklaus--Toma (OT) manifolds are higher‑dimensional analogues constructed from number‑theoretic data. We study non‑Kähler Hermitian metrics on these spaces via the pluriclosed flow. A conjecture of the long time behavior is the following:
@@ -135,6 +141,7 @@ Our first result confirms the first part of the conjecture.
 Let $\omega_0$ be any pluriclosed metric on the OT manifold of type $(s,s)$, then, the pluriclosed flow $\omega(t)$ starting with $\omega_0$ will exist on $[0,\infty)$.
 
 We are primarily interested in the blow‑down limit. Motivated by the Type III asymptotics of the Ricci flow, we therefore study the normalized pluriclosed flow. On OT manifolds the generalized Kähler structure introduced by Hitchin and Gualtieri is natural and widespread; with respect to this structure the long‑time behavior of the flow is governed by a fully nonlinear complex Monge–Ampère type PDE. See [Streets](https://arxiv.org/abs/1405.0727).
+
 $$\frac{\partial}{\partial t}f(t)+f(t)=\operatorname{log}\frac{\operatorname{det}g_\mathbb{C}(t)}{\operatorname{det}h_\mathbb{C}(t)}-\operatorname{log}\frac{\operatorname{det}g_\mathbb{H}(t)}{\operatorname{det}h_\mathbb{H}(t)}.$$
 
 Note that the nonconvexity of this Monge--Ampère-type equation makes estimates extremely challenging. With this in mind, we establish the following result, which partially resolves the second part of the conjecture for the Inoue surface.
@@ -162,8 +169,12 @@ We first develop the analytic framework in close analogy with the Ricci flow. In
 
 **Theorem (CGLWW, 25)**
 Let $(M,g(t),\alpha(t))$ be a solution of $\alpha$-Ricci flow on $[0,T)$. Then:
-- A prior $$\|\alpha\|$$ boundedness: $$\sup_{M\times\{t\}} \|\alpha\|^2\leq ((\sup_{M\times\{0\}}\|\alpha\|^2)^{-1}+\frac{t}{2})^{-1};$$
+- A prior $$\|\alpha\|$$ boundedness: 
+
+$$\sup_{M\times\{t\}} \|\alpha\|^2\leq ((\sup_{M\times\{0\}}\|\alpha\|^2)^{-1}+\frac{t}{2})^{-1};$$
+
 - The $\alpha$-scalar curvature $$R^\alpha = R-\frac{1}{4}\|\alpha\|^2:$$
+
 $$\square R^\alpha = 2\|\operatorname{Ric}-\frac{1}{4}\alpha\otimes\alpha\|^2 + \frac{1}{2}\|d_g^*\alpha\|^2\geq\frac{2}{n}(R^\alpha)^2.$$
 
 With the help of the above, we establish the following: $\mathcal{F}^\alpha$ functional, $\mathcal{W}^\alpha$ functional, reduced length and reduced volume, and no-local collapsing theorem. The upshots are the following Pseduolocality theorem and canonical neighborhood theorem. Since the statement of these theorems are like the case in the Ricci flow and are known to the experts, I will just sketch the statements. 
