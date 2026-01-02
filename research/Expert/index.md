@@ -4,22 +4,22 @@ title: Detailed Research
 permalink: /research/expert/
 ---
 
-### Geometry Research Overall
+## Geometry Research Overall
 Broadly speaking, my research interest focuses on understanding special metrics and their moduli spaces on manifolds, motivated by physics and topology. These metrics include [locally conformally flat](https://en.wikipedia.org/wiki/Conformally_flat_manifold) metrics, [Yamabe](https://en.wikipedia.org/wiki/Yamabe_problem) metrics, non-Kähler Hermitian metrics, and hyperbolic type metrics. The tools I use to understand these structures include conformal deformation, collapsing theory of Cheeger-Fukaya-Gromov, nonlinear PDE, and generalized curvature flows with surgeries. My coauthors and I have made progress on some well-known conjectures and discovered some interesting geometric phenomena. 
 
-### Sections
+## Sections
 - [The The Moduli space of locally conformally flat manifolds](#the-moduli-space-of-locally-conformally-flat-manifolds)
 - [Generalized Curvature Flows](#generalized-curvature-flows)
 
-### The Moduli space of locally conformally flat manifolds
+## The Moduli space of locally conformally flat manifolds
 
-## Sections
+# Sections
 - [Introduction](#1-introduction)
 - [Wang 2025](#2-on-the-structure-of-locally-conformally-flat-orbifolds-and-ale-metrics)
 - [Viaclovsky-Wang 2026](#3-collapsing-yamabe-metrics-with-jeff-viaclovsky-in-preperation)
 - [Future work](#4-future-work)
 
-## 1: Introduction
+# 1: Introduction
 My research concerns the moduli space of locally conformally flat ([LCF](https://en.wikipedia.org/wiki/Conformally_flat_manifold)) manifolds. LCF manifolds generalize two-dimensional conformal structures and arise as critical points of curvature functionals analogous to the Einstein condition. Their moduli space can be regarded as a higher-dimensional analogue of [Teichmüller space](https://en.wikipedia.org/wiki/Teichmüller_space). Concretely, we study
 $\mathfrak{M}(n,\mu_0,C_0)$, the collection of closed n-dimensional Riemannian manifolds $(M,g)$ satisfying:
 - locally conformally flat
@@ -31,7 +31,7 @@ Let $\mathfrak{M}'(n, \mu_0, C_0)$ be the moduli space if we in addition assume 
 
 Several of my works are made towards this direction, which will be explained next.
 
-## 2: On the structure of locally conformally flat orbifolds and ALE metrics ([Wang 2025](https://arxiv.org/abs/2511.09857))
+# 2: On the structure of locally conformally flat orbifolds and ALE metrics ([Wang 2025](https://arxiv.org/abs/2511.09857))
 
 When $\mu_0>0$, [Tian-Viaclovsky](https://www.sciencedirect.com/science/article/pii/S0001870804002890?via%3Dihub) shows that any sequence in $\mathfrak{M}(n,\mu_0,C_0)$ subconverges to a Riemannian multi-fold — loosely, a finite collection of orbifolds that may be identified at a finite set of points. In particular, these limiting orbifolds have strictly positive orbifold Yamabe invariant. Moreover, [Tian-Viaclovsky](https://link.springer.com/article/10.1007/s00222-004-0412-1) proves that the blow-up models at singular points are scalar-flat ALE manifolds. ![G-H convergence](./GH.png)
 
@@ -69,7 +69,7 @@ If $(M^n,g)$ is an LCF compact orbifold with positive scalar curvature,
 then there exists a solution $\tilde{g} = u^\frac{4}{n-2} g$ to the orbifold Yamabe problem on $(M,g)$. 
 
 The result is interesting because the orbifold Yamabe problem is not solvable in full generality. [Viaclovsky](https://aif.centre-mersenne.org/articles/10.5802/aif.2617/) exhibits a counterexample.
-## 3: Collapsing Yamabe metrics (With Jeff Viaclovsky, In preperation)
+# 3: Collapsing Yamabe metrics (With Jeff Viaclovsky, In preperation)
 If we set $\mu_0=0$, so that we only assume the Yamabe invariant satisfies $Y(M,[g])>0$, we denote the corresponding moduli space by $\mathfrak{M}(n,0^+,C_0)$. In this regime genuine degenerations can occur. In the sequel we study collapsing phenomena for sequences of Yamabe metrics; the metrics need not be locally conformally flat, only of constant scalar curvature. We develop some new degeneration examples which is not known in other area. Many of the statements below extend to nonpositive Yamabe classes, but for brevity we state here the positive‑Yamabe results.
 
 **Definition** 
@@ -94,13 +94,13 @@ Then, for $i$ large, there exists $g'_i$ such that:
 Next, we present a gluing construction of collapsing constant‑scalar‑curvature metrics, in the spirit of [D.Joyce](https://onlinelibrary.wiley.com/doi/10.1155/S016117120310806X). The novelty is that one or both pieces are allowed to collapse while keeping the constant scalar curvature unchanged. More precisely, we prove the following:
 
 **Theorem (Via-W, 26)**
-Let $\{(M_i,g_i)\}$ be a $S(n,d,C,D,\delta)$-spectural admissible sequence, $\{N_i,h_i)\}$ be a $S(n,k,C,D,\delta)$-spectural admissible sequence, with corresponding limits as $i\to\infty$, $(X^d, g_\infty)$, $(Y^k,h_\infty)$, with $d,k\geq 3$. Then, for $i$-sufficiently large, there will be a sequence of metrics $(M_i$ $N_i, \hat{g}_i)$, such that:
+Let $\{(M_i,g_i)\}$ be a $S(n,d,C,D,\delta)$-spectural admissible sequence, $\{N_i,h_i)\}$ be a $S(n,k,C,D,\delta)$-spectural admissible sequence, with corresponding limits as $i\to\infty$, $(X^d, g_\infty)$, $(Y^k,h_\infty)$, with $d,k\geq 3$. Then, for $i$-sufficiently large, there will be a sequence of metrics $(M_i$`#`$N_i, \hat{g}_i)$, such that:
 - The scalar curvature $R(\hat{g}_i)\equiv 1$;
 - The sequence converges to $(X\wedge Y, l)$ in the Gromov-Hausdorff sense, where $l_{X} = g_\infty$ and $l_{Y} = h_\infty$.
 
 ![Collapsing example](collapsing_example.png)
 This yields the first example of degeneration to the wedge sum of two manifolds of different dimensions while preserving the constant-scalar-curvature condition. The degeneration described above can indeed occur in the moduli space $\mathfrak{M}(n,0^+,C_0)$. Unlike the Einstein setting, the Ricci curvature need not be uniformly bounded from below: in our construction the blow-down of the neck region has Ricci curvature tending to $-\infty$. Note that the curvature blow-up in this construction occurs only at isolated points.
-## 4: Future work
+# 4: Future work
 We aim to compactify the moduli space $\mathfrak{M}(n,0^+,C_0)$ and to fully describe the degeneration behavior as metrics approach the boundary of the moduli space. A central analytic input is an $\varepsilon$-regularity statement for LCF manifolds assuming only a positive Yamabe invariant.
 
 **Conjecture** 
@@ -118,18 +118,18 @@ holds.
 When a uniform positive lower bound $\mu_0>0$ on the Yamabe invariant is assumed, an $\varepsilon$-regularity statement of this type follows from Moser iteration techniques. The conjecture is known to fail in the zero Yamabe constant or $n\geq 5$ regime.
 
 If the above conjecture is established, curvature concentration can occur only at finitely many points, and one expects that the collapsing and gluing phenomena constructed capture the worst-case degenerations in the boundary of $\mathfrak{M}(n,0^+,C_0)$.
-### Generalized Curvature Flows
+## Generalized Curvature Flows
 
-## Sections
+# Sections
 - [Pluriclosed flow](#2-pluriclosed-flow-on-oeljeklaus--toma-manifolds-with-jeff-d-streets-streets-wang-2025)
 - [$\alpha$-Ricci flow general theory](#3--ricci-flow-analytic-aspects-with-a-cusenza-y-guo-k-lee-m-womack-in-preperation)
 - [$\alpha$-Ricci flow on torus](#4--ricci-flow-on-torus-with-yifan-guo-in-preperation)
 - [Future work](#5-future-work)
 
-## 1: Introduction
+# 1: Introduction
 Another strand of my research uses generalized curvature flows to address geometric and topological problems. Analogous to Ricci flow, these flows evolve a metric according to curvature and related geometric quantities. In the non-Kähler setting we study the long-time behaviour of the pluriclosed flow on Oeljeklaus--Toma (OT) manifolds, resolving several conjectures motivated by model solutions. For hyperbolic geometry we introduce a new curvature flow, develop the analytic toolkit required for existence, regularity, and surgery, and apply it to topological questions in hyperbolic 3‑manifolds in the spirit of the Geometrization program.
 
-## 2: Pluriclosed flow on Oeljeklaus--Toma manifolds (with Jeff D. Streets [Streets-Wang 2025](https://arxiv.org/abs/2512.11246)) 
+# 2: Pluriclosed flow on Oeljeklaus--Toma manifolds (with Jeff D. Streets [Streets-Wang 2025](https://arxiv.org/abs/2512.11246)) 
 
 The [Inoue surfaces](https://en.wikipedia.org/wiki/Inoue_surface) of type $S^0$ provide fundamental examples of compact complex surfaces in Kodaira class VII that are non‑Kähler. Oeljeklaus--Toma (OT) manifolds are higher‑dimensional analogues constructed from number‑theoretic data. We study non‑Kähler Hermitian metrics on these spaces via the pluriclosed flow. A conjecture of the long time behavior is the following:
 **Conjecture** 
@@ -160,6 +160,7 @@ Unlike the Chern--Ricci flow, where estimates for the complex Monge--Ampère equ
 In this work we introduce a family of generalized curvature flows, which we call the $\alpha$-Ricci flow. Our aim is to apply this flow to the geometry and topology of compact hyperbolic $3$-manifolds: to uncover new geometric structures and to construct finite-dimensional moduli spaces of hyperbolic-type metrics analogous to Teichmüller space.
 
 **Definition** Given a smooth manifold $M^n$, we say that a one-parameter family $(g_t,\alpha_t)$ of pairs of Riemannian metrics and closed one forms is a solution of *$\alpha$-Ricci flow* if it satisfies
+
 $$\left\{\begin{aligned}
 	\frac{\partial }{\partial t}g=&-2\operatorname{Ric}+\tfrac{1}{2}\alpha\otimes\alpha\\
 	\frac{\partial }{\partial t}\alpha=&-dd^*_g\alpha
@@ -169,11 +170,11 @@ We first develop the analytic framework in close analogy with the Ricci flow. In
 
 **Theorem (CGLWW, 25)**
 Let $(M,g(t),\alpha(t))$ be a solution of $\alpha$-Ricci flow on $[0,T)$. Then:
-- A prior $$\|\alpha\|$$ boundedness: 
+- A prior $\|\alpha\|$ boundedness: 
 
 $$\sup_{M\times\{t\}} \|\alpha\|^2\leq ((\sup_{M\times\{0\}}\|\alpha\|^2)^{-1}+\frac{t}{2})^{-1};$$
 
-- The $\alpha$-scalar curvature $$R^\alpha = R-\frac{1}{4}\|\alpha\|^2:$$
+- The $\alpha$-scalar curvature $R^\alpha = R-\frac{1}{4}\|\alpha\|^2:$
 
 $$\square R^\alpha = 2\|\operatorname{Ric}-\frac{1}{4}\alpha\otimes\alpha\|^2 + \frac{1}{2}\|d_g^*\alpha\|^2\geq\frac{2}{n}(R^\alpha)^2.$$
 
@@ -186,7 +187,8 @@ On a complete $\alpha$-Ricci flow solution. For a ball at the scale of lower bou
 On a complete 3-D $\alpha$-Ricci flow. Then the "high curvature region" is close to either a quotient of shrinking sphere, a quotient of shrinking "neck", or a shrinking "cap".
 
 Building on the above, we implement an $\alpha$-Ricci flow with [surgery](https://en.wikipedia.org/wiki/Poincaré_conjecture#Ricci_flow_with_surgery) and plan to apply this surgical flow to geometric and topological problems.
-## 4: $\alpha$-Ricci flow on torus (With Yifan Guo, In preperation)
+
+# 4: $\alpha$-Ricci flow on torus (With Yifan Guo, In preperation)
 We now apply $\alpha$-Ricci flow to two-dimensional manifolds. The sphere ($g=0$) case is treated in [Lott-Sesum](https://ems.press/journals/cmh/articles/12457), and the higher‑genus case ($g\geq 2$) will be discussed in the next section. Here we concentrate on the torus ($g=1$). In this setting the flow exhibits a novel instability in its long‑time behavior.
 
 First, we derive uniform estimates for the geometric quantities that follow. The arguments use the Gauss--Bonnet theorem in an essential way, and hence are specific to two dimensions. The conclusions are summarized in the theorem below.
@@ -210,7 +212,8 @@ et $(g(t),\alpha(t))$ be a solution to the $\alpha$-Ricci flow on $\mathbb{T}^2$
 
 This is illustrated as the following:
 ![alpha torus](./alpha_torus.png)
-## 5: Future work
+
+# 5: Future work
 
 We wish to apply $\alpha$-Ricci flow to [hyperbolic manifolds](https://en.wikipedia.org/wiki/Hyperbolic_manifold) in dimensions 2 and 3. In dimension 2, some partial results are made, where if $[\alpha]\neq0$, there will be cusps in the limit, and the thick part converges to the hyperbolic metric. In dimension 3, we may use the $\alpha$-Ricci flow with surgery to prove the following conjecture:
 
