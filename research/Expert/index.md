@@ -25,7 +25,7 @@ $\mathfrak{M}(n,\mu_0,C_0)$, the collection of closed n-dimensional Riemannian m
 - locally conformally flat
 - unit-scalar curvature: $R(g)\equiv 1$
 - $g$ is the Yamabe metric with the Yamabe constant $Y(M,[g])> \mu_0 \geq0$
-- $\int_M |\operatorname{Ric(g)|^{\frac{n}{2}}}dvol_g < C_0$
+- $$\int_M |\operatorname{Ric(g)|^{\frac{n}{2}}}dvol_g < C_0$$
 
 Let $\mathfrak{M}'(n, \mu_0, C_0)$ be the moduli space if we in addition assume that the manifolds are orientable.
 
@@ -74,7 +74,7 @@ If we set $\mu_0=0$, so that we only assume the Yamabe invariant satisfies $Y(M,
 
 **Definition** 
 We call a sequence of n-dimensional closed Riemannian manifolds $\{(M^n_i,g_i)\}$ *$S(n,d,C,D,\delta)$-spectral admissible* if
-- $|\operatorname{Rm}(g_i)|_{g_i}\leq C_1$;
+- $$|\operatorname{Rm}(g_i)|_{g_i}\leq C_1;$$
 - $\operatorname{diam}(M^n_i,g_i)\leq D$;
 - The scalar curvature $R(g_i)\equiv1$;
 - Let $\mu_i = \frac{d\operatorname{vol}(g_i)}{\operatorname{vol(M^n_i,g_i)}}$. The sequence converges to a d-dimensional manifold in the measured Gromov-Hausdorff sense, i.e.:
@@ -84,9 +84,9 @@ $$(M^n_i,g_i,\mu_i)\to (X^d, g_\infty,\mu_\infty)$$
 First, we solve the following [Cheeger-Fukaya-Gromov](https://www.ihes.fr/~gromov/wp-content/uploads/2018/08/384.pdf) conjecture in the constant scalar curvature case:
 
 **Theorem (Via-W, 26)**
-Let $\{M_i^n, g_i)\}$ be a $S(n,d,C,D,\delta)$-spectral admissible sequence. 
+Let $\{(M_i^n, g_i)\}$ be a $S(n,d,C,D,\delta)$-spectral admissible sequence. 
 Then, for $i$ large, there exists $g'_i$ such that:
-- $g_i$, $g_i'$ are close in the $C^\infty$ sense, with $|g_i-g_i'|_{C^\infty}\to 0$;
+- $g_i$, $g_i'$ are close in the $C^\infty$ sense, with $$|g_i-g_i'|_{C^\infty}\to 0;$$
 - $g_i'$ is $\mathcal{N}$-invariant;
 - $R(g_i') \equiv 1$;
 - $(M_i, g_i')\to (X, g_\infty)$ in the Gromov-Hausdorff sense.
@@ -96,7 +96,7 @@ Next, we present a gluing construction of collapsing constant‑scalar‑curvatu
 **Theorem (Via-W, 26)**
 Let $\{(M_i,g_i)\}$ be a $S(n,d,C,D,\delta)$-spectural admissible sequence, $\{N_i,h_i)\}$ be a $S(n,k,C,D,\delta)$-spectural admissible sequence, with corresponding limits as $i\to\infty$, $(X^d, g_\infty)$, $(Y^k,h_\infty)$, with $d,k\geq 3$. Then, for $i$-sufficiently large, there will be a sequence of metrics $(M_i\#N_i, \hat{g}_i)$, such that:
 - The scalar curvature $R(\hat{g}_i)\equiv 1$;
-- The sequence converges to $(X\wedge Y, l)$ in the Gromov-Hausdorff sense, where $l_{|X} = g_\infty$ and $l_{|Y} = h_\infty$.
+- The sequence converges to $(X\wedge Y, l)$ in the Gromov-Hausdorff sense, where $$l_{|X} = g_\infty$$ and $$l_{|Y} = h_\infty$$.
 
 ![Collapsing example](collapsing_example.png)
 This yields the first example of degeneration to the wedge sum of two manifolds of different dimensions while preserving the constant-scalar-curvature condition. The degeneration described above can indeed occur in the moduli space $\mathfrak{M}(n,0^+,C_0)$. Unlike the Einstein setting, the Ricci curvature need not be uniformly bounded from below: in our construction the blow-down of the neck region has Ricci curvature tending to $-\infty$. Note that the curvature blow-up in this construction occurs only at isolated points.
@@ -162,8 +162,8 @@ We first develop the analytic framework in close analogy with the Ricci flow. In
 
 **Theorem (CGLWW, 25)**
 Let $(M,g(t),\alpha(t))$ be a solution of $\alpha$-Ricci flow on $[0,T)$. Then:
-- A prior $|\alpha|$ boundedness: $\sup_{M\times\{t\}} |\alpha|^2\leq ((\sup_{M\times\{0\}}|\alpha|^2)^{-1}+\frac{t}{2})^{-1}$;
-- The $\alpha$-scalar curvature $R^\alpha = R-\frac{1}{4}|\alpha|^2$:
+- A prior $$|\alpha|$$ boundedness: $$\sup_{M\times\{t\}} |\alpha|^2\leq ((\sup_{M\times\{0\}}|\alpha|^2)^{-1}+\frac{t}{2})^{-1};$$
+- The $\alpha$-scalar curvature $$R^\alpha = R-\frac{1}{4}|\alpha|^2:$$
 $$\square R^\alpha = 2|\operatorname{Ric}-\frac{1}{4}\alpha\otimes\alpha|^2 + \frac{1}{2}|d_g^*\alpha|^2\geq\frac{2}{n}(R^\alpha)^2.$$
 
 With the help of the above, we establish the following: $\mathcal{F}^\alpha$ functional, $\mathcal{W}^\alpha$ functional, reduced length and reduced volume, and no-local collapsing theorem. The upshots are the following Pseduolocality theorem and canonical neighborhood theorem. Since the statement of these theorems are like the case in the Ricci flow and are known to the experts, I will just sketch the statements. 
@@ -184,12 +184,12 @@ First, we derive uniform estimates for the geometric quantities that follow. The
 Let $(M,g(t),\alpha(t))$ be a solution of $\alpha$-Ricci flow on the 2-torus with arbitrary initial data. Then:
 - The flow exists on $[0,\infty)$;
 - The volume $V(t)$: $V(0)\le V(t) \le V(0)\sqrt{1+\frac{t}{2C}}$;
-- Type III estimate: $|R(x,t)|\le \frac{C}{1+t}$;
+- Type III estimate: $$|R(x,t)|\le \frac{C}{1+t};$$
 - Diameter estimate: $\operatorname{diam}(M,g(t)) \le C(\sqrt{t}+1)$.
 
 Despite many formal similarities between the Ricci flow and $\alpha$-Ricci flow, their long-time behavior differs markedly. On the 2-torus we prove the following result describing the Gromov–Hausdorff limit of solutions to $\alpha$-Ricci flow: the limit depends discontinuously on the initial data.
 
-We choose a set of generators $[\gamma_1],[\gamma_2]$ of $\pi_1(M)\cong\mathbb{Z}\times\mathbb{Z}$ and define $a=\int _{\gamma_1}\alpha$, $b=\int_{\gamma_2}\alpha$. Since $\alpha$ evolves by an exact form, both $a$ and $b$ are invariant under the flow.
+We choose a set of generators $[\gamma_1],[\gamma_2]$ of $\pi_1(M)\cong\mathbb{Z}\times\mathbb{Z}$ and define $a=\int_{\gamma_1}\alpha$, $b=\int_{\gamma_2}\alpha$. Since $\alpha$ evolves by an exact form, both $a$ and $b$ are invariant under the flow.
 
 **Theorem (Guo-W, 25)**
 et $(g(t),\alpha(t))$ be a solution to the $\alpha$-Ricci flow on $\mathbb{T}^2$. Then we have the following.
