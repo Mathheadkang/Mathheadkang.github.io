@@ -13,3 +13,5 @@ For expert, this is the detailed overview of my [research]({{ site.baseurl }}/re
 For non-expert, this is an intuitive, high-level [introduction]({{ site.baseurl }}/research/introduction/).
 
 If you are interested in AI4Math, please take a look at my work in [AI4Math]({{ site.baseurl }}/research/AI4Math/).
+
+![banana](dancing-banana.gif)
