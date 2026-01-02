@@ -10,8 +10,7 @@ kramdown:
 
 # Navigation menu
 header_pages:
-  - index.md
-  - research.md
-  - projects.md
-  - teaching.md
-  - cv.md
+  - research/index.md
+  - projects/index.md
+  - teaching/index.md
+  - cv/index.md
