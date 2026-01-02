@@ -156,7 +156,7 @@ In particular, when $s =1$, on the Inoue surface, $S^0$:
 - The metric: $\operatorname{tr}_{\omega_h(t)}\omega(t)\geq \delta>0$.
 
 Unlike the Chern--Ricci flow, where estimates for the complex Monge--Ampère equation often yield full metric equivalence between the model metric and the evolving metric, here we obtain only a uniform lower bound for the evolving metric with respect to the model metric $\omega_h(t)$. Establishing the corresponding uniform upper bound will be addressed in future work.
-## 3: $\alpha$-Ricci flow analytic aspects (With A. Cusenza, Y. Guo, K. Lee, M. Womack, In preperation)
+# 3: $\alpha$-Ricci flow analytic aspects (With A. Cusenza, Y. Guo, K. Lee, M. Womack, In preperation)
 In this work we introduce a family of generalized curvature flows, which we call the $\alpha$-Ricci flow. Our aim is to apply this flow to the geometry and topology of compact hyperbolic $3$-manifolds: to uncover new geometric structures and to construct finite-dimensional moduli spaces of hyperbolic-type metrics analogous to Teichmüller space.
 
 **Definition** Given a smooth manifold $M^n$, we say that a one-parameter family $(g_t,\alpha_t)$ of pairs of Riemannian metrics and closed one forms is a solution of *$\alpha$-Ricci flow* if it satisfies
