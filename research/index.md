@@ -6,7 +6,7 @@ permalink: /research/
 # Research 
 My research interest focuses on understanding special metrics and their moduli spaces on manifolds, motivated by physics and topology. I am also interested in applying modern learning to mathematics (AI4Math).
 
-The modern view point of geometry is not "static" anymore. Instead, we can let the metrics of a manifold varies. See this
+The modern view point of geometry is not "static" anymore. Instead, we can let the metrics of a manifold varies. See <a href="{{ site.baseurl }}/research/sphere.html"><button type="button">Sphere Visualization</button></a>
 
 For expert, this is the detailed overview of my [research]({{ site.baseurl }}/research/expert/).
 
