@@ -1,4 +1,8 @@
-
+---
+layout: page
+title: Detailed Research
+permalink: /research/expert/
+---
 
 # Geometry Research Overall
 Broadly speaking, my research interest focuses on understanding special metrics and their moduli spaces on manifolds, motivated by physics and topology. These metrics include [locally conformally flat](https://en.wikipedia.org/wiki/Conformally_flat_manifold) metrics, [Yamabe](https://en.wikipedia.org/wiki/Yamabe_problem) metrics, non-Kähler Hermitian metrics, and hyperbolic type metrics. The tools I use to understand these structures include conformal deformation, collapsing theory of Cheeger-Fukaya-Gromov, nonlinear PDE, and generalized curvature flows with surgeries. My coauthors and I have made progress on some well-known conjectures and discovered some interesting geometric phenomena. 
