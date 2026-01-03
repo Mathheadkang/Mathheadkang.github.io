@@ -17,7 +17,7 @@ I share the same English (pingying) name with several other outstanding Chinese 
 
 ## Research Interests
 
-Geometric Analysis and Geometric Flows, epecially the collapsing behavior in the moduli space and the geometric flows. Below is a taste of my research.
+Geometric Analysis and Geometric Flows, epecially the collapsing behavior in the moduli space and the geometric flows. Here is a taste of my research.
 
 ![geometric_singularity](./assets/images/geometric_singularity.gif)
 
@@ -28,7 +28,7 @@ Geometric Analysis and Geometric Flows, epecially the collapsing behavior in the
 - **$\alpha$- Ricci flow and Geometric Application I: Analytic Aspect** (with Anna Cusenza, Yifan Guo, Kuan-Hui Lee, and Michael Womack), in preparation, 2026.
 - **Pluriclosed flow on Oeljeklaus–Toma manifolds** (with J. Streets), [preprint](https://arxiv.org/abs/2512.11246), 2025.
 - **On the structure of locally conformally flat orbifolds and ALE metrics**, [preprint](https://arxiv.org/abs/2511.09857), 2025.
-- **Machine learning and LLM-Boost symbolic regression for predicting $\mathbb{Q}$-gonality of modular curves**, [ICML 2025, AI4Math Workshop](https://icml.cc/virtual/2025/52435).
+- **Machine learning and LLM-Boost symbolic regression for predicting $\mathbb{Q}$-gonality of modular curves** (With Xu Zhuang, Yuxiang Yao, Po-Chu Hsu and Peikai Qi), [ICML 2025, AI4Math Workshop](https://icml.cc/virtual/2025/52435).
 
 
 
