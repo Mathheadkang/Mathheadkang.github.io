@@ -17,14 +17,14 @@ $\mathbb{Q}$-gonality of \(X_\Gamma\) can be determined (uniquely) from a finite
 
 While the conjecture remains open, we develop numerical evidence and a refined theoritical conjecture. The reason why numerical method can work in this conjecture is that mathematicians has built a dataset for existing modular curves: [the L-functions and Modular Forms Database (LMFDB)](https://www.lmfdb.org/knowledge/show/modcurve). It contains the desired dataset where the $\mathbb{Q}$-gonality is known and the dataset where the $\mathbb{Q}$-gonality only has a theoritical bound. Notably, the mathematical dataset is noise-free. Thus, it is obvious that we can use all sort of regression techniques to tackle this problem. In this direction, we used the some classical machine learning regression methods, XGBoost, FNN, FT-Transformer. As a results, they achieved $90\%$. For example, the FT-Transformer:
 
-| Dataset | Acc. (%) | $R^2$ | RMSE |
-| :--- | :--- | :--- | :--- |
+| Dataset | Accuracy | $R^2$ | RMSE |
+| :--- | :---: | :---: | :---: |
 | $D_{train}^{i}$ | $95.62 \pm 0.70$ | $0.9389 \pm 0.0325$ | $2.813 \pm 0.972$ |
 | $D_{val}^{i}$ | $93.17 \pm 0.58$ | $0.9971 \pm 0.1079$ | $3.770 \pm 4.001$ |
 | $D_{test}$ | $93.64 \pm 0.63$ | $0.9968 \pm 0.0007$ | $0.496 \pm 0.055$ |
 | $D_{bounds}$ | $93.46 \pm 0.82$ | -- | -- |
-*Table: Performance metrics for the FT-Transformer model across different datasets*
 
+*Table: Performance metrics for the FT-Transformer model across different datasets*
 
 It is not suprising that the results are good. The drawback is obvious, these methods are so-called "black-box" model, meaning we have a overly complicated mathematical formula to represent the true relation (overfitted) while the true relation remains unknown. Also, its generalization is limited. The mathematicians cannot use this result to formulate any reasonable conjecture and therefore does not lead to its actual solution.
 
