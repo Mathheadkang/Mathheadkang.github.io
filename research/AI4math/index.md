@@ -13,7 +13,7 @@ permalink: /research/AI4Math/
 In this work we study the $\mathbb{Q}$-gonality of modular curves.  For a congruence subgroup $\Gamma\subset\mathrm{SL}(2,\mathbb{Z})$ the associated modular curve is $X_\Gamma=\mathbb{H}/\Gamma$; when the action is free this is a hyperbolic Riemann surface.  The Q-gonality of $X_\Gamma$ is the minimal degree of a nonconstant rational map $X_\Gamma\to\mathbb{P}^1$ defined over $\mathbb{Q}$.  Computing $\mathbb{Q}$-gonalities is notoriously difficult.
 
 **Conjecture**
-$\mathbb{Q}$-gonality of \(X_\Gamma\) can be determined (uniquely) from a finite collection of arithmetic and geometric invariants: genus, number of cusps, Mordell–Weil rank, log-conductor, level, number of rational cusps, coarse class number, and coarse level.
+$\mathbb{Q}$-gonality of $X_\Gamma$ can be determined (uniquely) from a finite collection of arithmetic and geometric invariants: genus, number of cusps, Mordell–Weil rank, log-conductor, level, number of rational cusps, coarse class number, and coarse level.
 
 While the conjecture remains open, we develop numerical evidence and a refined theoritical conjecture. The reason why numerical method can work in this conjecture is that mathematicians has built a dataset for existing modular curves: [the L-functions and Modular Forms Database (LMFDB)](https://www.lmfdb.org/knowledge/show/modcurve). It contains the desired dataset where the $\mathbb{Q}$-gonality is known and the dataset where the $\mathbb{Q}$-gonality only has a theoritical bound. Notably, the mathematical dataset is noise-free. Thus, it is obvious that we can use all sort of regression techniques to tackle this problem. In this direction, we used the some classical machine learning regression methods, XGBoost, FNN, FT-Transformer. As a results, they achieved $90\%$. For example, the FT-Transformer:
 
@@ -44,7 +44,7 @@ the process is repeated.
 This process is equivalent to linear regression on seleted features by Frisch-Waugh-Lovell Theorem if our initial factor model is linear regression model. However, this
 viewpoint allows us to generalize further. Unlike standard regression models optimized purely for mean squared error, our final model prioritizes interpretability and accuracy, often resulting in lower bias and more meaningful symbolic expressions. The greedy selection strategy balances the exploitation of promising features with the exploration of novel ones, enabling efficient and interpretable symbolic discovery.
 
-The key take-aways:
+**The key take-aways**:
 - LLM is not omnipotent, you have to let it evolve, starting from very simple tasks, similar to [AlphaEvolve](https://arxiv.org/abs/2506.13131).
 - Orthogonalization makes every step "meaningful". We can explore new direction in the solution space at every step.
 - Treat LLM as a "guessor", and record all the results that LLM may guess right and run a for loop.
