@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ricci Flow Sphere - GIF Generator</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            /* Transparent background for the GIF if needed, or solid color */
+            background: #000; 
+        }
+        canvas { display: block; }
+        #status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: monospace;
+            background: rgba(0,0,0,0.5);
+            padding: 5px;
+        }
+    </style>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- CCapture.js for GIF recording -->
+    <script src="https://cdn.jsdelivr.net/npm/ccapture.js-npmfixed@1.1.0/build/CCapture.all.min.js"></script>
+</head>
+<body>
+    <div id="status">Initializing...</div>
+
+<script>
+    // --- 1. THREE.JS SCENE SETUP ---
+    const scene = new THREE.Scene();
+
+    // Camera setup for a good view of the sphere
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 4.5;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(2); // Higher pixel ratio for better resolution
+    document.body.appendChild(renderer.domElement);
+
+    // --- LIGHTING ---
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); 
+    scene.add(ambientLight);
+    
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(5, 5, 5);
+    scene.add(dirLight);
+    
+    const blueLight = new THREE.PointLight(0x008cba, 0.8, 40);
+    blueLight.position.set(-5, 2, 5);
+    scene.add(blueLight);
+
+    // --- SPHERE SETUP ---
+    const originalRadius = 1.8;
+    const geometry = new THREE.IcosahedronGeometry(originalRadius, 24); 
+    
+    const material = new THREE.MeshPhysicalMaterial({
+        color: 0x00aecb,      
+        roughness: 0.7,       
+        metalness: 0.1,       
+        clearcoat: 0.0,       
+        flatShading: false,
+    });
+
+    const wireGeo = new THREE.WireframeGeometry(geometry);
+    const wireMat = new THREE.LineBasicMaterial({ color: 0x004455, transparent: true, opacity: 0.1 });
+    const wireframe = new THREE.LineSegments(wireGeo, wireMat);
+    
+    const sphere = new THREE.Mesh(geometry, material);
+    sphere.add(wireframe);
+    scene.add(sphere);
+
+    // --- 2. SCRAMBLE LOGIC (Rough Initial Data) ---
+    function scrambleSphere() {
+        const positions = sphere.geometry.attributes.position;
+        const v3 = new THREE.Vector3();
+        
+        // Use Perlin-like noise or simple sine waves to deform
+        for (let i = 0; i < positions.count; i++) {
+            v3.fromBufferAttribute(positions, i);
+            
+            // Apply some noise based on position
+            const noise = Math.sin(v3.x * 2.5) * Math.cos(v3.y * 2.5) * Math.sin(v3.z * 2.5);
+            const scale = 1 + (noise * 0.4); // Deform by up to 40%
+            
+            v3.multiplyScalar(scale);
+            positions.setXYZ(i, v3.x, v3.y, v3.z);
+        }
+        positions.needsUpdate = true;
+        sphere.geometry.computeVertexNormals();
+    }
+
+    // Apply initial deformation
+    scrambleSphere();
+
+    // --- 3. RICCI FLOW LOGIC ---
+    let isFlowing = false;
+    let frameCount = 0;
+    const maxFrames = 900; // Increased limit for slower flow
+
+    function updateRicciFlow() {
+        const positions = sphere.geometry.attributes.position;
+        const v3 = new THREE.Vector3();
+        const flowRate = 0.04; // Slower flow for smoother animation
+        let currentTotalError = 0;
+
+        for (let i = 0; i < positions.count; i++) {
+            v3.fromBufferAttribute(positions, i);
+            const dist = v3.length();
+            const diff = dist - originalRadius;
+            currentTotalError += Math.abs(diff);
+
+            if (Math.abs(diff) > 0.001) {
+                // Move towards original radius
+                const scaleFactor = 1 - (flowRate * (dist - originalRadius) / dist);
+                positions.setXYZ(i, v3.x * scaleFactor, v3.y * scaleFactor, v3.z * scaleFactor);
+            }
+        }
+        positions.needsUpdate = true;
+        sphere.geometry.computeVertexNormals();
+
+        return currentTotalError;
+    }
+
+    // --- 4. RECORDING SETUP ---
+    // Create a capturer instance
+    // NOTE: CCapture with 'gif' format requires a web worker. 
+    // If the worker script fails to load (due to CORS or path issues), it won't save.
+    // We will try 'webm' as a fallback if gif is problematic, or ensure worker path is correct.
+    // For local testing without a server, 'webm' is often more reliable.
+    
+    const capturer = new CCapture({ 
+        format: 'webm',  // Changed to webm for better reliability without local server setup
+        framerate: 30,
+        verbose: true
+    });
+
+    let recording = false;
+
+    function startRecording() {
+        document.getElementById('status').innerText = "Recording GIF... Please wait.";
+        recording = true;
+        isFlowing = true;
+        capturer.start();
+    }
+
+    function stopRecording() {
+        if (!recording) return;
+        recording = false;
+        isFlowing = false;
+        capturer.stop();
+        capturer.save();
+        document.getElementById('status').innerText = "Done! Check for download.";
+    }
+
+    // --- 5. ANIMATION LOOP ---
+    function animate() {
+        requestAnimationFrame(animate);
+
+        // Slowly rotate for better visualization
+        sphere.rotation.y += 0.005;
+        sphere.rotation.x += 0.002;
+
+        if (isFlowing) {
+            const error = updateRicciFlow();
+            
+            // Stop if smooth enough or max frames reached
+            if (error < 0.5 || frameCount > maxFrames) {
+                stopRecording();
+            }
+        }
+
+        renderer.render(scene, camera);
+        
+        if (recording) {
+            capturer.capture(renderer.domElement);
+            frameCount++;
+        }
+    }
+
+    // Start automatically after 1 second
+    setTimeout(startRecording, 1000);
+
+    animate();
+    
+    // Handle resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+</script>
+</body>
+</html>

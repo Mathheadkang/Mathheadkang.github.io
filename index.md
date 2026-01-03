@@ -17,7 +17,9 @@ I share the same English (pingying) name with several other outstanding Chinese 
 
 ## Research Interests
 
-Geometric Analysis and Geometric Flows, epecially the collapsing behavior in the moduli space and the geometric flows.
+Geometric Analysis and Geometric Flows, epecially the collapsing behavior in the moduli space and the geometric flows. Below is a taste of my research.
+
+![geometric_singularity](./assets/images/geometric_singularity.gif)
 
 ## Publications and Preprints
 
