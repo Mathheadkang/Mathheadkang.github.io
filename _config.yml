@@ -15,3 +15,6 @@ header_pages:
   - projects/index.md
   - teaching/index.md
   - cv/index.md
+
+include:
+  - google938234040fa277a2.html
