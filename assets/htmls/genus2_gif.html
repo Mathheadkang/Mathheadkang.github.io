@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Genus 2 Deformation - GIF Generator</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #1a1a1a; }
+        canvas { display: block; }
+        #status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: monospace;
+            background: rgba(0,0,0,0.5);
+            padding: 5px;
+        }
+    </style>
+    <!-- CCapture.js -->
+    <script src="https://cdn.jsdelivr.net/npm/ccapture.js-npmfixed@1.1.0/build/CCapture.all.min.js"></script>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="status">Initializing...</div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // --- SCENE SETUP ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x111111);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0, 9);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(1); // Keep at 1 for consistent recording speed/size
+        document.body.appendChild(renderer.domElement);
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0xffffff, 100);
+        pointLight.position.set(5, 10, 5);
+        scene.add(pointLight);
+        const blueLight = new THREE.PointLight(0x007bff, 50);
+        blueLight.position.set(-5, 2, 0);
+        scene.add(blueLight);
+
+        // Materials
+        const matSolid = new THREE.MeshPhysicalMaterial({
+            color: 0x00aaff,
+            metalness: 0.1,
+            roughness: 0.2,
+            transmission: 0,
+            flatShading: false,
+            side: THREE.DoubleSide
+        });
+
+        const matWire = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.15
+        });
+
+        // --- GENUS 2 LOGIC ---
+        function createGenus2() {
+            class Figure8Curve extends THREE.Curve {
+                constructor(scale = 1) {
+                    super();
+                    this.scale = scale;
+                }
+                getPoint(t, optionalTarget = new THREE.Vector3()) {
+                    const a = 2.5;
+                    const theta = t * Math.PI * 2;
+                    const sinT = Math.sin(theta);
+                    const cosT = Math.cos(theta);
+                    const dem = 1 + sinT * sinT;
+                    const x = (a * cosT) / dem;
+                    const y = (a * sinT * cosT) / dem;
+                    const z = 0;
+                    return optionalTarget.set(x, y, z).multiplyScalar(this.scale);
+                }
+            }
+
+            const path = new Figure8Curve(1);
+            const geometry = new THREE.TubeGeometry(path, 100, 0.25, 32, true);
+            
+            const count = geometry.attributes.position.count;
+            const posAttr = geometry.attributes.position;
+            
+            const shapeDoubleTorus = new Float32Array(count * 3);
+            const shapeVase = new Float32Array(count * 3);
+
+            for(let i=0; i<count; i++) {
+                const x = posAttr.getX(i);
+                const y = posAttr.getY(i);
+                const z = posAttr.getZ(i);
+
+                // 1. Double Torus
+                shapeDoubleTorus[i*3] = x;
+                shapeDoubleTorus[i*3+1] = y;
+                shapeDoubleTorus[i*3+2] = z;
+
+                // 2. Vase Form
+                const distToCenter = Math.sqrt(x*x + y*y);
+                let w = Math.max(0, 1 - (distToCenter / 1.5)); 
+                
+                let tx = x;
+                let ty = y;
+                let tz = z;
+
+                if (w > 0) {
+                    tz = z * (1 + 10.0 * w * w); 
+                }
+
+                shapeVase[i*3] = tx;
+                shapeVase[i*3+1] = ty;
+                shapeVase[i*3+2] = tz;
+            }
+
+            geometry.userData = { shapeDoubleTorus, shapeVase };
+            const mesh = new THREE.Mesh(geometry, matSolid);
+            mesh.add(new THREE.Mesh(geometry, matWire));
+            
+            return mesh;
+        }
+
+        const mesh = createGenus2();
+        mesh.rotation.x = Math.PI / 5; // Stand Vase up
+        scene.add(mesh);
+
+        // --- RECORDING SETUP ---
+        const capturer = new CCapture({ 
+            format: 'webm', 
+            framerate: 30,
+            verbose: true
+        });
+
+        let recording = false;
+        let t = 0;
+        let frameCount = 0;
+        const maxFrames = 300; // 10 seconds at 30fps
+
+        function startRecording() {
+            document.getElementById('status').innerText = "Recording... Please wait.";
+            recording = true;
+            capturer.start();
+        }
+
+        function stopRecording() {
+            if (!recording) return;
+            recording = false;
+            capturer.stop();
+            capturer.save();
+            document.getElementById('status').innerText = "Done! Check for download.";
+        }
+
+        // --- ANIMATION LOOP ---
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Update Deformation
+            if (recording) {
+                const progress = frameCount / maxFrames;
+                const angle = progress * Math.PI * 2;
+                t = (1 - Math.cos(angle)) / 2; // Oscillates 0 -> 1 -> 0
+                
+                frameCount++;
+                if (frameCount >= maxFrames) {
+                    stopRecording();
+                }
+            } else {
+                // Preview mode if not recording (or before/after)
+                const time = Date.now() * 0.001;
+                t = (1 - Math.cos(time)) / 2;
+            }
+
+            // Apply deformation
+            const pos = mesh.geometry.attributes.position;
+            const { shapeVase, shapeDoubleTorus } = mesh.geometry.userData;
+            
+            for(let i=0; i<pos.count; i++) {
+                const idx = i*3;
+                const tx = THREE.MathUtils.lerp(shapeVase[idx], shapeDoubleTorus[idx], t);
+                const ty = THREE.MathUtils.lerp(shapeVase[idx+1], shapeDoubleTorus[idx+1], t);
+                const tz = THREE.MathUtils.lerp(shapeVase[idx+2], shapeDoubleTorus[idx+2], t);
+                pos.setXYZ(i, tx, ty, tz);
+            }
+            pos.needsUpdate = true;
+            
+            // Rotate slightly
+            mesh.rotation.y += 0.005;
+
+            renderer.render(scene, camera);
+            
+            if (recording) {
+                capturer.capture(renderer.domElement);
+            }
+        }
+
+        // Start recording after a short delay
+        setTimeout(startRecording, 1000);
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

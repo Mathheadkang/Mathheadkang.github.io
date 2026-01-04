@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continuous Topology Deformation</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #1a1a1a; font-family: 'Segoe UI', sans-serif; color: white; }
+        canvas { display: block; }
+        
+        #ui-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            border-radius: 12px;
+            width: 320px;
+            backdrop-filter: blur(5px);
+            border: 1px solid #444;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        h2 { margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid #555; padding-bottom: 10px; color: #fff; }
+        
+        .controls { margin-top: 20px; display: flex; flex-direction: column; gap: 20px; }
+        
+        .btn-group { display: flex; gap: 5px; background: #222; padding: 4px; border-radius: 6px; }
+        button {
+            flex: 1;
+            padding: 8px;
+            background: transparent;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        button:hover { color: #fff; background: #333; }
+        button.active { background: #007bff; color: white; shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        label { font-size: 0.8rem; display: block; margin-bottom: 8px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        input[type="range"] { 
+            width: 100%; 
+            cursor: pointer; 
+            accent-color: #007bff;
+        }
+
+        .labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: #666; margin-top: -5px; }
+
+        #info-box {
+            margin-top: 10px;
+            padding: 12px;
+            background: #252525;
+            border-left: 3px solid #007bff;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #ddd;
+        }
+    </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="ui-container">
+        <h2>Homotopy (Continuous Deformation)</h2>
+        
+        <div class="controls">
+            <div>
+                <label>Select Topology Genus</label>
+                <div class="btn-group">
+                    <button id="btn-g0" class="active" onclick="setGenus(0)">0 (Sphere)</button>
+                    <button id="btn-g1" onclick="setGenus(1)">1 (Torus)</button>
+                    <button id="btn-g2" onclick="setGenus(2)">2 (Double)</button>
+                </div>
+            </div>
+
+            <div>
+                <label>Deformation (t)</label>
+                <input type="range" id="morphSlider" min="0" max="1" step="0.005" value="0">
+                <div class="labels">
+                    <span id="label-start">Cube</span>
+                    <span id="label-end">Sphere</span>
+                </div>
+            </div>
+
+            <div id="info-box">
+                Select a Genus to see the transformation.
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js';
+
+        // --- Standard Scene Setup ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x111111);
+        
+        // Grid for reference
+        const grid = new THREE.GridHelper(20, 20, 0x333333, 0x222222);
+        grid.position.y = -2;
+        scene.add(grid);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 3, 9);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.body.appendChild(renderer.domElement);
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0xffffff, 100);
+        pointLight.position.set(5, 10, 5);
+        scene.add(pointLight);
+        const blueLight = new THREE.PointLight(0x007bff, 50);
+        blueLight.position.set(-5, 2, 0);
+        scene.add(blueLight);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        // --- Materials ---
+        // Using points/wireframe over a solid mesh helps visualize the vertex density and movement
+        const matSolid = new THREE.MeshPhysicalMaterial({
+            color: 0x00aaff,
+            metalness: 0.1,
+            roughness: 0.2,
+            transmission: 0, // Solid
+            flatShading: false,
+            side: THREE.DoubleSide // Important for the "Cup" interior
+        });
+
+        const matWire = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.15
+        });
+
+        // --- Data Storage ---
+        // We will store the meshes here
+        const meshes = {
+            g0: null,
+            g1: null,
+            g2: null
+        };
+        
+        let currentGenus = 0;
+
+        // =========================================================
+        // GENUS 0: Cube -> Potato -> Sphere
+        // =========================================================
+        function createGenus0() {
+            // High segment count for smooth deformation
+            const geometry = new THREE.BoxGeometry(2, 2, 2, 40, 40, 40);
+            
+            const count = geometry.attributes.position.count;
+            const posAttr = geometry.attributes.position;
+            
+            const shapeCube = new Float32Array(count * 3);
+            const shapePotato = new Float32Array(count * 3);
+            const shapeSphere = new Float32Array(count * 3);
+            
+            const tempVec = new THREE.Vector3();
+
+            for(let i=0; i<count; i++){
+                const x = posAttr.getX(i);
+                const y = posAttr.getY(i);
+                const z = posAttr.getZ(i);
+
+                // 1. Cube (Original)
+                shapeCube[i*3] = x;
+                shapeCube[i*3+1] = y;
+                shapeCube[i*3+2] = z;
+
+                // 2. Potato (Noise)
+                tempVec.set(x,y,z).normalize(); // Project to sphere surface first
+                const noise = Math.sin(x*2.5) * Math.cos(y*2.5) * Math.sin(z*2.5);
+                const r = 1.3 + (noise * 0.2); // irregular radius
+                
+                // Squash
+                shapePotato[i*3] = tempVec.x * r * 1.2;
+                shapePotato[i*3+1] = tempVec.y * r * 0.9;
+                shapePotato[i*3+2] = tempVec.z * r * 0.8;
+
+                // 3. Sphere (Perfect)
+                tempVec.set(x,y,z).normalize().multiplyScalar(1.3);
+                shapeSphere[i*3] = tempVec.x;
+                shapeSphere[i*3+1] = tempVec.y;
+                shapeSphere[i*3+2] = tempVec.z;
+            }
+
+            geometry.userData = { shapeCube, shapePotato, shapeSphere };
+            
+            const mesh = new THREE.Mesh(geometry, matSolid);
+            mesh.add(new THREE.Mesh(geometry, matWire));
+            return mesh;
+        }
+
+        // =========================================================
+        // GENUS 1: Torus <-> Coffee Mug
+        // =========================================================
+        function createGenus1() {
+            // We use a TorusGeometry as the base.
+            // A Mug is a torus where one side of the ring is swollen to be the cup, 
+            // and the other side stays thin to be the handle.
+            
+            // Radius: 1, Tube: 0.3
+            const geometry = new THREE.TorusGeometry(1, 0.25, 48, 80);
+            
+            const count = geometry.attributes.position.count;
+            const posAttr = geometry.attributes.position;
+
+            const shapeTorus = new Float32Array(count * 3);
+            const shapeMug = new Float32Array(count * 3);
+            
+            const center = new THREE.Vector3();
+            
+            for(let i=0; i<count; i++){
+                const x = posAttr.getX(i);
+                const y = posAttr.getY(i);
+                const z = posAttr.getZ(i);
+
+                // 1. Torus State (Clean)
+                shapeTorus[i*3] = x;
+                shapeTorus[i*3+1] = y;
+                shapeTorus[i*3+2] = z;
+
+                // 2. Mug State (Deformed)
+                // We need to determine "where" on the torus this vertex is.
+                // Major Angle (Theta): Angle around Z axis (The main ring)
+                // Minor Angle (Phi): Angle around the tube center
+                
+                const angle = Math.atan2(y, x); // -PI to PI
+                
+                // Let's say the Handle is at Angle 0 (Right side)
+                // The Cup Body is at Angle PI (Left side)
+                
+                // Calculate interpolation factor 'w' based on angle.
+                // w = 0 near handle, w = 1 near cup body
+                // We map the angle range so that the handle area is protected
+                let distFromHandle = Math.abs(angle); // 0 at handle, PI at cup body
+                // Smoothstep logic to make a distinct handle vs cup transition
+                let w = Math.max(0, (distFromHandle - 0.5) / 1.0); 
+                w = Math.min(1, w);
+
+                // Calculate the "Tube Center" for this vertex
+                // The main ring is radius 1 in XY plane
+                const ringX = Math.cos(angle) * 1.0;
+                const ringY = Math.sin(angle) * 1.0;
+                
+                // Vector from ring center to vertex (Local tube vector)
+                const tubeX = x - ringX;
+                const tubeY = y - ringY;
+                const tubeZ = z;
+
+                // --- DEFORMATION LOGIC ---
+                // If w is high (Cup Body area):
+                // 1. Expand the radius (Move vertex away from ring center)
+                // 2. Stretch vertically (Z axis in TorusGeometry is actually Z, but we want a cup standing up?)
+                // Note: TorusGeometry is usually in XY plane. Let's assume Cup stands along Y? 
+                // Actually TorusGeometry standard is donut laying flat on XY? No, it stands on Z usually.
+                // Let's stick to standard coordinates: Torus is a donut around Z axis.
+                
+                // Target position
+                let tx = x;
+                let ty = y;
+                let tz = z;
+
+                if (w > 0) {
+                    // It's part of the cup body
+                    
+                    // 1. Expand Radius to make the cup hold volume
+                    const expansion = 1.0; 
+                    
+                    // Shift the cup body center to the left (-x) so it looks balanced
+                    const shiftX = -0.5 * w;
+                    
+                    // 2. Create the "Cup Floor"
+                    // In a torus, the inner ring (closest to center) is the "hole".
+                    // For the cup, the inner ring needs to fuse or flatten to form the bottom.
+                    // We check if the vertex is on the 'inner' side of the tube.
+                    const distToOrigin = Math.sqrt(x*x + y*y);
+                    
+                    // Flatten the bottom of the cup (assume -Z is down relative to cup orientation?)
+                    // Let's rotate the concept: Handle is X+, Cup is X-. Cup 'Up' is Z+.
+                    
+                    // Simple Box-ify effect on the Cup side
+                    tx = x - (x * 0.5 * w) - (1.0 * w); // Push left
+                    
+                    // Expand the tube thickness significantly to create the cup wall
+                    // tube vector * scale
+                    tx = ringX + tubeX * (1 + 4.0 * w); 
+                    ty = ringY + tubeY * (1 + 4.0 * w); 
+                    tz = tubeZ * (1 + 5.0 * w); // Make it tall (Deep cup)
+
+                    // FLATTENING THE BOTTOM (Crude simulation)
+                    // If Z is negative, flatten it to a floor
+                    if (tz < -1.0 * w) tz = -1.0 * w; 
+                    
+                    // This creates a very fat torus on one side. 
+                    // To make it look like a cup, we simply accept it's a "fat wall" cup.
+                }
+
+                shapeMug[i*3] = tx;
+                shapeMug[i*3+1] = ty;
+                shapeMug[i*3+2] = tz;
+            }
+
+            geometry.userData = { shapeTorus, shapeMug };
+            const mesh = new THREE.Mesh(geometry, matSolid);
+            mesh.add(new THREE.Mesh(geometry, matWire));
+            return mesh;
+        }
+
+        // =========================================================
+        // GENUS 2: Double Torus <-> Two Ear Vase
+        // =========================================================
+        function createGenus2() {
+            // Base Topology: A "Figure 8" Tube (Lemniscate)
+            // This is topologically equivalent to a double torus (Genus 2 surface)
+            
+            // Create a path for the Figure 8
+            class Figure8Curve extends THREE.Curve {
+                constructor(scale = 1) {
+                    super();
+                    this.scale = scale;
+                }
+                getPoint(t, optionalTarget = new THREE.Vector3()) {
+                    // Lemniscate of Bernoulli parametric eq
+                    // t goes 0..1, map to 0..2PI
+                    const a = 2.5;
+                    const theta = t * Math.PI * 2;
+                    
+                    const sinT = Math.sin(theta);
+                    const cosT = Math.cos(theta);
+                    const dem = 1 + sinT * sinT;
+                    
+                    const x = (a * cosT) / dem;
+                    const y = (a * sinT * cosT) / dem;
+                    const z = 0;
+
+                    return optionalTarget.set(x, y, z).multiplyScalar(this.scale);
+                }
+            }
+
+            const path = new Figure8Curve(1);
+            const geometry = new THREE.TubeGeometry(path, 100, 0.25, 32, true);
+            
+            const count = geometry.attributes.position.count;
+            const posAttr = geometry.attributes.position;
+            
+            const shapeDoubleTorus = new Float32Array(count * 3);
+            const shapeVase = new Float32Array(count * 3);
+
+            for(let i=0; i<count; i++) {
+                const x = posAttr.getX(i);
+                const y = posAttr.getY(i);
+                const z = posAttr.getZ(i);
+
+                // 1. Double Torus (Standard Figure 8)
+                shapeDoubleTorus[i*3] = x;
+                shapeDoubleTorus[i*3+1] = y;
+                shapeDoubleTorus[i*3+2] = z;
+
+                // 2. Vase Form
+                // The center of the 8 (where it crosses) becomes the body of the vase.
+                // The loops become the handles.
+                
+                const distToCenter = Math.sqrt(x*x + y*y); // Distance from (0,0)
+                
+                // Weight: 1 at center (Vase Body), 0 at tips (Handles)
+                let w = Math.max(0, 1 - (distToCenter / 1.5)); 
+                
+                let tx = x;
+                let ty = y;
+                let tz = z;
+
+                // SWELLING LOGIC
+                if (w > 0) {
+                    // Expand Z (Height of vase)
+                    // The closer to center, the taller
+                    tz = z * (1 + 10.0 * w * w); 
+                    
+                    // Expand XY (Width of vase body)
+                    // We need to push the "tube walls" outward to form a pot, 
+                    // but keep the hole logic intact technically?
+                    // Actually, for a Vase, the "holes" are the handles. The body is the solid junction.
+                    
+                    // Get vector from local tube center? Hard with TubeGeometry.
+                    // Simple approximation: simply inflate everything near center.
+                    
+                    // Push geometry out in Z to make a tall cylinder
+                    // And push X/Y slightly to blend
+                }
+
+                // Orientation fix: Rotate so Vase stands up
+                // Currently 8 is flat on XY. We want Vase standing on Z?
+                // Let's just store the deformation, we can rotate the mesh later.
+
+                shapeVase[i*3] = tx;
+                shapeVase[i*3+1] = ty;
+                shapeVase[i*3+2] = tz;
+            }
+
+            geometry.userData = { shapeDoubleTorus, shapeVase };
+            const mesh = new THREE.Mesh(geometry, matSolid);
+            mesh.add(new THREE.Mesh(geometry, matWire));
+            
+            return mesh;
+        }
+
+
+        // --- Initialization ---
+        meshes.g0 = createGenus0();
+        meshes.g1 = createGenus1();
+        meshes.g2 = createGenus2();
+
+        // Adjust Orientations for better viewing
+        meshes.g1.rotation.x = Math.PI / 2; // Stand Mug up
+        meshes.g2.rotation.x = Math.PI / 2; // Stand Vase up
+
+        scene.add(meshes.g0);
+        scene.add(meshes.g1);
+        scene.add(meshes.g2);
+
+        // Hide logic
+        function updateVisibility(g) {
+            meshes.g0.visible = g === 0;
+            meshes.g1.visible = g === 1;
+            meshes.g2.visible = g === 2;
+        }
+
+        // --- Global Interface ---
+        window.setGenus = (g) => {
+            currentGenus = g;
+            
+            // Button styles
+            document.querySelectorAll('.btn-group button').forEach((b, i) => {
+                b.className = (i === g) ? 'active' : '';
+            });
+
+            updateVisibility(g);
+            
+            // Reset Slider
+            const slider = document.getElementById('morphSlider');
+            slider.value = 0;
+            
+            // Labels & Info
+            const lStart = document.getElementById('label-start');
+            const lEnd = document.getElementById('label-end');
+            const info = document.getElementById('info-box');
+            
+            if (g === 0) {
+                lStart.innerText = "Cube";
+                lEnd.innerText = "Sphere";
+                info.innerHTML = "<strong>Genus 0:</strong> Continuous deformation from a Cube to a Sphere via a 'Potato' stage. No holes are created or destroyed.";
+            } else if (g === 1) {
+                lStart.innerText = "Coffee Mug";
+                lEnd.innerText = "Torus";
+                info.innerHTML = "<strong>Genus 1:</strong> The handle of the mug corresponds to the hole of the donut. The cup body is just a swollen part of the loop.";
+            } else if (g === 2) {
+                lStart.innerText = "Vase";
+                lEnd.innerText = "Double Torus";
+                info.innerHTML = "<strong>Genus 2:</strong> A two-handled vase is topologically a figure-8. The junction swells to become the vase body.";
+            }
+        };
+
+        // Initial Set
+        setGenus(0);
+
+
+        // --- Animation Loop ---
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            
+            const t = parseFloat(document.getElementById('morphSlider').value);
+            
+            // 1. GENUS 0 (3-Stage Morph)
+            if(currentGenus === 0 && meshes.g0) {
+                const pos = meshes.g0.geometry.attributes.position;
+                const { shapeCube, shapePotato, shapeSphere } = meshes.g0.geometry.userData;
+                
+                for(let i=0; i<pos.count; i++) {
+                    const idx = i*3;
+                    let tx, ty, tz;
+                    
+                    if (t <= 0.5) {
+                        // Cube -> Potato
+                        const nt = t * 2;
+                        tx = THREE.MathUtils.lerp(shapeCube[idx], shapePotato[idx], nt);
+                        ty = THREE.MathUtils.lerp(shapeCube[idx+1], shapePotato[idx+1], nt);
+                        tz = THREE.MathUtils.lerp(shapeCube[idx+2], shapePotato[idx+2], nt);
+                    } else {
+                        // Potato -> Sphere
+                        const nt = (t - 0.5) * 2;
+                        tx = THREE.MathUtils.lerp(shapePotato[idx], shapeSphere[idx], nt);
+                        ty = THREE.MathUtils.lerp(shapePotato[idx+1], shapeSphere[idx+1], nt);
+                        tz = THREE.MathUtils.lerp(shapePotato[idx+2], shapeSphere[idx+2], nt);
+                    }
+                    pos.setXYZ(i, tx, ty, tz);
+                }
+                pos.needsUpdate = true;
+                meshes.g0.rotation.y += 0.002;
+            }
+
+            // 2. GENUS 1 (Mug <-> Torus)
+            if(currentGenus === 1 && meshes.g1) {
+                const pos = meshes.g1.geometry.attributes.position;
+                const { shapeMug, shapeTorus } = meshes.g1.geometry.userData;
+                
+                // Slider 0 = Mug, 1 = Torus
+                // Wait, logic check: User probably wants 0=Object, 1=Shape
+                
+                for(let i=0; i<pos.count; i++) {
+                    const idx = i*3;
+                    // Interpolate
+                    const tx = THREE.MathUtils.lerp(shapeMug[idx], shapeTorus[idx], t);
+                    const ty = THREE.MathUtils.lerp(shapeMug[idx+1], shapeTorus[idx+1], t);
+                    const tz = THREE.MathUtils.lerp(shapeMug[idx+2], shapeTorus[idx+2], t);
+                    
+                    pos.setXYZ(i, tx, ty, tz);
+                }
+                pos.needsUpdate = true;
+                
+                // Rotate for better view
+                meshes.g1.rotation.z = -Math.PI/2; // Orient handle correctly
+                meshes.g1.rotation.y += 0.005; 
+            }
+
+            // 3. GENUS 2 (Vase <-> Double Torus)
+            if(currentGenus === 2 && meshes.g2) {
+                const pos = meshes.g2.geometry.attributes.position;
+                const { shapeVase, shapeDoubleTorus } = meshes.g2.geometry.userData;
+                
+                for(let i=0; i<pos.count; i++) {
+                    const idx = i*3;
+                    const tx = THREE.MathUtils.lerp(shapeVase[idx], shapeDoubleTorus[idx], t);
+                    const ty = THREE.MathUtils.lerp(shapeVase[idx+1], shapeDoubleTorus[idx+1], t);
+                    const tz = THREE.MathUtils.lerp(shapeVase[idx+2], shapeDoubleTorus[idx+2], t);
+                    pos.setXYZ(i, tx, ty, tz);
+                }
+                pos.needsUpdate = true;
+                meshes.g2.rotation.y += 0.005;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+    </script>
+</body>
+</html>
