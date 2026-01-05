@@ -196,6 +196,7 @@ However, this intuition fails in 3 and higher dimension. The biggest issue is th
 - A 3 manifold admit a metric that [Ricci flow with surgery](https://en.wikipedia.org/wiki/Poincaré_conjecture#Ricci_flow_with_surgery) that will terminate in finite time for all componenents must be a 3 dimensional sphere.
 
 Here is an illustration of what is happening if you start a Ricci flow with a "simply connected" 3 manifold.
+
 ![poincare](../../assets/images/sequential_disappearance.gif)
 
 To wrap it up, Ricci flow solves a pure topological conjecture, which is very impressive. I will write "A higher level introduction to Poincaré conjecture" in the future.
