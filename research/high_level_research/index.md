@@ -6,7 +6,11 @@ permalink: /research/introduction/
 
 # Description
 
-**Definition**: a *Manifold* is space that around each point it "likes" Euclidean space.
+My research focus on the objects called "[Manifold](https://en.wikipedia.org/wiki/Manifold)", which you may think they are higher dimensional "surfaces".
+- **Definition**: a *Manifold* is space that around each point it "likes" Euclidean space.
+
+One sentence to summerize my research:
+- My research explores the "universe" of all possible geometric shapes on manifolds, classifying how complex spaces can collapse into extreme boundaries and proving how they evolve over time to reveal their fundamental structure.
 
 # Contents
 - [Geometry and Topology](#geometry-and-topology)
@@ -194,7 +198,7 @@ To wrap it up, Ricci flow solves a pure topological conjecture, which is very im
 
 Now, I want to summerize what I have done. We consider a flow which is very natural and closed related to Ricci flow. We call this $\alpha$-Ricci flow. Me and my coauthors show (we are still working on some part of the proof).
 - **Theorem** Consider the $\alpha$-Ricci flow.
-    - The $\alpha$-Ricci flow on 2-torus will either "collapse" to a circle or to a point, depending on a rationality condition initially;
-    - The $\alpha$-Ricci flow with surgery on some 3 manifold will exist forever and converge to the desired metric.
+    - The $\alpha$-Ricci flow on 2-torus will either "collapse" to a circle or to a point in the Gromov-Hausdorff distance, depending on a rationality condition initially;
+    - The $\alpha$-Ricci flow with surgery on some 3 manifold will exist forever and converge to the desired metric in the Gromov-Hausdorff distance.
 
 If you are interested in the details, please take a look at my [research](../Expert/index.md).
