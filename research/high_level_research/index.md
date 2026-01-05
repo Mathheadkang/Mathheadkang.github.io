@@ -192,8 +192,11 @@ On 2 dimension sphere, you can see the "bumps" are like the curvature distributi
 - A 2 dimension sphere (topological condition) admit a positive constant curvature metric.
 
 However, this intuition fails in 3 and higher dimension. The biggest issue is that "singularity" will occure, and prevent the flow to extend further. What I mean "singularity" is the place where curvature tends to infinity. This does not happen in the heat flow, but inevitable in Ricci flow. That is why it took a generation to fully solve the [Poincaré conjecture](https://en.wikipedia.org/wiki/Poincaré_conjecture), the main difficulty is how to deal with singularites. The whole proof basically can be summerized into two steps.
-- A 3 dimensional "simply connected" manifold admit a metric that [Ricci flow with surgery](https://en.wikipedia.org/wiki/Poincaré_conjecture#Ricci_flow_with_surgery) that will terminate in finite time for all componenents.
+- A 3 dimensional "[simply connected](https://en.wikipedia.org/wiki/Simply_connected_space)" manifold admit a metric that [Ricci flow with surgery](https://en.wikipedia.org/wiki/Poincaré_conjecture#Ricci_flow_with_surgery) that will terminate in finite time for all componenents.
 - A 3 manifold admit a metric that [Ricci flow with surgery](https://en.wikipedia.org/wiki/Poincaré_conjecture#Ricci_flow_with_surgery) that will terminate in finite time for all componenents must be a 3 dimensional sphere.
+
+Here is an illustration of what is happening if you start a Ricci flow with a "simply connected" 3 manifold.
+![poincare](../../assets/images/sequential_disappearance.gif)
 
 To wrap it up, Ricci flow solves a pure topological conjecture, which is very impressive. I will write "A higher level introduction to Poincaré conjecture" in the future.
 

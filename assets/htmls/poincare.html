@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sequential Disappearance</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #ffffff; }
+        canvas { display: block; }
+        #ui {
+            position: absolute; top: 20px; left: 20px;
+            background: rgba(255, 255, 255, 0.95); padding: 20px;
+            border: 1px solid #ddd; border-radius: 8px;
+            font-family: 'Segoe UI', sans-serif;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 220px;
+        }
+        h3 { margin: 0 0 10px 0; font-size: 16px; color: #333; }
+        .step { font-size: 12px; color: #666; margin-bottom: 4px; }
+        button {
+            background: #222; color: white; border: none; padding: 12px;
+            font-size: 14px; cursor: pointer; border-radius: 4px; width: 100%;
+            margin-top: 15px; transition: background 0.2s;
+        }
+        button:hover { background: #444; }
+        button:disabled { background: #bbb; cursor: default; }
+        #status { margin-top: 10px; font-size: 12px; color: #444; text-align: center; font-weight: bold;}
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ccapture.js-npmfixed@1.1.0/build/CCapture.all.min.js"></script>
+</head>
+<body>
+
+<div id="ui">
+    <h3>Sequential Disappearance</h3>
+    <div class="step">1. Top Sphere vanishes</div>
+    <div class="step">2. Right Sphere vanishes</div>
+    <div class="step">3. Left Sphere vanishes</div>
+    <div class="step">4. Center Sphere vanishes</div>
+    <button id="btn-record" onclick="startRecording()">Record WebM</button>
+    <div id="status">Ready</div>
+</div>
+
+<script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-2.5, 2.5, 2.5, -2.5, 0, 10);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const fragmentShader = `
+        precision highp float;
+        uniform vec2 uResolution;
+        uniform float uTime; 
+        
+        float smin(float a, float b, float k) {
+            float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);
+            return mix(b, a, h) - k * h * (1.0 - h);
+        }
+
+        vec3 rotateZ(vec3 p, float angle) {
+            float c = cos(angle); float s = sin(angle);
+            return vec3(p.x * c - p.y * s, p.x * s + p.y * c, p.z);
+        }
+
+        float sdSphere(vec3 p, float r) {
+            return length(p) - r;
+        }
+
+        float sdCappedCylinder(vec3 p, float h, float r) {
+            vec2 d = abs(vec2(length(p.xz), p.y)) - vec2(r, h);
+            return min(max(d.x, d.y), 0.0) + length(max(d, 0.0));
+        }
+
+        float remap(float t, float t1, float t2) {
+            return clamp((t - t1) / (t2 - t1), 0.0, 1.0);
+        }
+
+        float map(vec3 p) {
+            float t = uTime;
+
+            // --- 1. CENTRAL SPHERE ---
+            // Shrinks continuously from 0.9 to 0.0 by the end (t=1.0)
+            // It is the last to vanish.
+            float rCenter = mix(0.9, 0.0, remap(t, 0.0, 1.0));
+            // Ensure strictly 0 at end
+            rCenter = max(0.0001, rCenter); 
+            float d = sdSphere(p, rCenter);
+            
+            // If radius is effectively 0, we can push distance to infinity to hide it,
+            // but smin might act weird. keeping it small positive is safer, or handling visibility logic.
+            if(rCenter < 0.001) d = 100.0;
+
+            // --- BRANCH 1 (Top) ---
+            // Detach: 0.35, Vanish: 0.45
+            {
+                float localT_break = remap(t, 0.0, 0.35); 
+                float localT_vanish = remap(t, 0.0, 0.45); 
+
+                vec3 dir = vec3(0.0, 1.0, 0.0);
+                float dist = 1.6; 
+                vec3 pos = dir * dist;
+
+                // Sphere Logic: Shrinks 0.7 -> 0.0
+                float rSph = mix(0.7, 0.0, localT_vanish);
+                float dSph = (rSph < 0.001) ? 100.0 : sdSphere(p - pos, rSph);
+
+                // Neck Logic: Radius 0.3 -> -0.1
+                float rNeck = mix(0.3, -0.1, localT_break);
+                float hNeck = mix(dist * 0.5, dist * 0.3, localT_break);
+                vec3 pNeck = p - (dir * dist * 0.5); 
+                float dNeck = sdCappedCylinder(pNeck, hNeck, rNeck);
+
+                float blend = mix(0.4, 0.05, localT_break);
+                
+                // Only blend neck if it exists
+                float branch = dSph;
+                if(rNeck > 0.0) {
+                     branch = smin(dSph, dNeck, 0.3);
+                }
+                
+                // Combine with main body
+                // We reduce blend k to 0 as it breaks to separate them cleanly
+                d = smin(d, branch, blend);
+            }
+
+            // --- BRANCH 2 (Right) ---
+            // Detach: 0.60, Vanish: 0.70
+            {
+                float localT_break = remap(t, 0.25, 0.60); 
+                float localT_vanish = remap(t, 0.25, 0.70); 
+
+                vec3 pos = rotateZ(vec3(0.0, 1.6, 0.0), radians(-120.0));
+                vec3 dir = normalize(pos);
+
+                float rSph = mix(0.6, 0.0, localT_vanish);
+                float dSph = (rSph < 0.001) ? 100.0 : sdSphere(p - pos, rSph);
+
+                float rNeck = mix(0.25, -0.1, localT_break);
+                float hNeck = mix(0.8, 0.4, localT_break);
+                
+                vec3 pNeck = p - (dir * 0.8);
+                pNeck = rotateZ(pNeck, radians(120.0));
+                float dNeck = sdCappedCylinder(pNeck, hNeck, rNeck);
+
+                float blend = mix(0.4, 0.05, localT_break);
+                
+                float branch = dSph;
+                if(rNeck > 0.0) branch = smin(dSph, dNeck, 0.3);
+                d = smin(d, branch, blend);
+            }
+
+            // --- BRANCH 3 (Left) ---
+            // Detach: 0.85, Vanish: 0.95
+            {
+                float localT_break = remap(t, 0.5, 0.85); 
+                float localT_vanish = remap(t, 0.5, 0.95);
+
+                vec3 pos = rotateZ(vec3(0.0, 1.6, 0.0), radians(120.0));
+                vec3 dir = normalize(pos);
+
+                float rSph = mix(0.5, 0.0, localT_vanish);
+                float dSph = (rSph < 0.001) ? 100.0 : sdSphere(p - pos, rSph);
+
+                float rNeck = mix(0.2, -0.1, localT_break);
+                float hNeck = mix(0.8, 0.4, localT_break);
+                
+                vec3 pNeck = p - (dir * 0.8);
+                pNeck = rotateZ(pNeck, radians(-120.0));
+                float dNeck = sdCappedCylinder(pNeck, hNeck, rNeck);
+
+                float blend = mix(0.4, 0.05, localT_break);
+                
+                float branch = dSph;
+                if(rNeck > 0.0) branch = smin(dSph, dNeck, 0.3);
+                d = smin(d, branch, blend);
+            }
+
+            return d;
+        }
+
+        vec3 calcNormal(vec3 p) {
+            const float h = 0.0001;
+            const vec2 k = vec2(1, -1);
+            return normalize(
+                k.xyy * map(p + k.xyy * h) +
+                k.yyx * map(p + k.yyx * h) +
+                k.yxy * map(p + k.yxy * h) +
+                k.xxx * map(p + k.xxx * h)
+            );
+        }
+
+        void main() {
+            vec2 uv = (gl_FragCoord.xy - 0.5 * uResolution.xy) / uResolution.y;
+            vec3 ro = vec3(0.0, 0.0, 5.0);
+            vec3 rd = normalize(vec3(uv, -1.0));
+
+            float tVal = 0.0;
+            float d = 0.0;
+            vec3 p;
+            bool hit = false;
+
+            for(int i = 0; i < 90; i++) {
+                p = ro + rd * tVal;
+                d = map(p);
+                if(d < 0.001) { hit = true; break; }
+                if(tVal > 10.0) break;
+                tVal += d;
+            }
+
+            vec3 color = vec3(1.0); 
+
+            if(hit) {
+                vec3 normal = calcNormal(p);
+                vec3 lightPos = vec3(2.0, 5.0, 5.0);
+                vec3 lightDir = normalize(lightPos);
+                
+                float diff = max(dot(normal, lightDir), 0.0);
+                float amb = 0.6 + 0.4 * normal.y;
+                float rim = pow(1.0 + dot(rd, normal), 3.0);
+                
+                vec3 surfColor = vec3(0.92, 0.92, 0.92);
+                color = surfColor * (diff * 0.7 + amb * 0.4) + rim * 0.1;
+            }
+
+            color = pow(color, vec3(0.4545));
+            gl_FragColor = vec4(color, 1.0);
+        }
+    `;
+
+    const planeMat = new THREE.ShaderMaterial({
+        fragmentShader: fragmentShader,
+        vertexShader: `void main() { gl_Position = vec4(position, 1.0); }`,
+        uniforms: {
+            uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+            uTime: { value: 0.0 }
+        }
+    });
+    const plane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), planeMat);
+    scene.add(plane);
+
+    const CONFIG = { frames: 360, fps: 30 }; // 12 seconds for full effect
+    let currentFrame = 0;
+    let isRecording = false;
+
+    const capturer = new CCapture({ 
+        format: 'webm', 
+        framerate: CONFIG.fps,
+        name: 'sequential_disappearance'
+    });
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        let progress = 0;
+        if(isRecording) {
+            progress = currentFrame / CONFIG.frames;
+            if(progress > 1.0) {
+                stopRecording();
+                return;
+            }
+            document.getElementById('status').innerText = `Recording: ${Math.round(progress*100)}%`;
+        }
+        
+        planeMat.uniforms.uTime.value = progress; 
+        renderer.render(scene, camera);
+
+        if(isRecording) {
+            capturer.capture(renderer.domElement);
+            currentFrame++;
+        }
+    }
+
+    function startRecording() {
+        isRecording = true;
+        currentFrame = 0;
+        document.getElementById('btn-record').disabled = true;
+        capturer.start();
+    }
+
+    function stopRecording() {
+        isRecording = false;
+        capturer.stop();
+        capturer.save();
+        document.getElementById('status').innerText = "Done! Downloading...";
+        document.getElementById('btn-record').disabled = false;
+        planeMat.uniforms.uTime.value = 0.0;
+        renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        planeMat.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+    });
+
+    animate();
+</script>
+</body>
+</html>
+``` Your video is ready!
