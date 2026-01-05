@@ -35,7 +35,7 @@ Imagine objects made of perfectly stretchy rubber:
 - glue parts together
 - punch new holes
 
-Try <a href="surface_deformation.html"><button type="button">Surface Deformation</button></a> yourself! 
+Try <a href="{{ site.baseurl }}/research/high_level_research/surface_deformation.html"><button type="button">Surface Deformation</button></a> yourself! 
 
 ![surface deformation](../../assets/images/surface_deformation.gif)
 
@@ -136,10 +136,11 @@ To get a Gromov-Hausdorff distance close example, take a look at this picture:
 ![GH_close](../../assets/images/GH_close.png)
 The spikes on the left ball is very thin. If we put both spaces into a common “room”, the spherical part are almost identical, which the spikes are almost negligible. Gromov-Hausdorff distance captures global shape while ignoring small geometric noise.
 
-Try this interactive example: <a href="GH_surface.html"><button type="button">Gromov-Hausdorff</button></a>
+Try this interactive example: <a href="{{ site.baseurl }}/research/high_level_research/GH_surface.html"><button type="button">Gromov-Hausdorff</button></a>
+
 ![torus_collapsing](../../assets/images/torus_collapse.gif)
 
-In this example, we can continuosly deform the metric on sphere and torus in the Gromov-Hausdorff sense. Does this looks familar to you? In fact, <a href="surface_deformation.html"><button type="button">Surface Deformation</button></a> can be seen in this way: 
+In this example, we can continuosly deform the metric on sphere and torus in the Gromov-Hausdorff sense. Does this looks familar to you? In fact, <a href="{{ site.baseurl }}/research/high_level_research/surface_deformation.html"><button type="button">Surface Deformation</button></a> can be seen in this way: 
 - *the Gromov-Hausdorff distance between the moving metric and the model metric (spherical or standard torus) is becoming smaller and smaller.* 
 
 A slight difference is that in Gromov-Hausdorff sense, the metric can be closed to a different dimensional space, which means the topology is changed. As the picture shows, torus can "collapse" to a circle, which is a lower dimensional space.
@@ -196,7 +197,7 @@ However, this intuition fails in 3 and higher dimension. The biggest issue is th
 
 To wrap it up, Ricci flow solves a pure topological conjecture, which is very impressive. I will write "A higher level introduction to Poincaré conjecture" in the future.
 
-Now, I want to summerize what I have done. We consider a flow which is very natural and closed related to Ricci flow. We call this $\alpha$-Ricci flow. Me and my coauthors show (we are still working on some part of the proof).
+Now, I want to summerize what I have done. We consider a flow which is very natural and closed related to Ricci flow. We call this $\alpha$-Ricci flow. Me and my coauthors show the following results (we are still working on some part of the proof).
 - **Theorem** Consider the $\alpha$-Ricci flow.
     - The $\alpha$-Ricci flow on 2-torus will either "collapse" to a circle or to a point in the Gromov-Hausdorff distance, depending on a rationality condition initially;
     - The $\alpha$-Ricci flow with surgery on some 3 manifold will exist forever and converge to the desired metric in the Gromov-Hausdorff distance.
