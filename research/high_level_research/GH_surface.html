@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gromov-Hausdorff Convergence</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #1a1a1a; font-family: 'Segoe UI', sans-serif; color: white; }
+        canvas { display: block; }
+        
+        #ui-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            border-radius: 12px;
+            width: 340px;
+            backdrop-filter: blur(5px);
+            border: 1px solid #444;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        h2 { margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid #555; padding-bottom: 10px; color: #fff; }
+        
+        .controls { margin-top: 20px; display: flex; flex-direction: column; gap: 20px; }
+        
+        .btn-group { display: flex; gap: 5px; background: #222; padding: 4px; border-radius: 6px; }
+        button {
+            flex: 1;
+            padding: 8px;
+            background: transparent;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        button:hover { color: #fff; background: #333; }
+        button.active { background: #007bff; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        label { font-size: 0.8rem; display: block; margin-bottom: 8px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        input[type="range"] { 
+            width: 100%; 
+            cursor: pointer; 
+            accent-color: #007bff;
+        }
+
+        .labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: #666; margin-top: -5px; }
+
+        #info-box {
+            margin-top: 10px;
+            padding: 12px;
+            background: #252525;
+            border-left: 3px solid #007bff;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #ddd;
+        }
+        
+        .math-term { color: #4faae9; font-style: italic; }
+    </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="ui-container">
+        <h2>Gromov-Hausdorff Convergence</h2>
+        
+        <div class="controls">
+            <div>
+                <label>Select Space ($X$)</label>
+                <div class="btn-group">
+                    <button id="btn-sphere" class="active" onclick="setShape('sphere')">Sphere ($S^2$)</button>
+                    <button id="btn-torus" onclick="setShape('torus')">Torus ($T^1$)</button>
+                </div>
+            </div>
+
+            <div>
+                <label>Gromov-Hausdorff Distance ($d_{GH}$)</label>
+                <input type="range" id="ghSlider" min="0" max="1" step="0.005" value="1">
+                <div class="labels">
+                    <span id="label-start">Limit Space ($d=0$)</span>
+                    <span id="label-end">Distorted ($d>0$)</span>
+                </div>
+            </div>
+
+            <div id="info-box">
+                Loading...
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // --- Scene Setup ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x1a1a1a);
+        
+        // Grid
+        const grid = new THREE.GridHelper(20, 20, 0x333333, 0x222222);
+        grid.position.y = -2;
+        scene.add(grid);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 4, 8);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.body.appendChild(renderer.domElement);
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(ambientLight);
+        
+        const mainLight = new THREE.DirectionalLight(0xffffff, 1);
+        mainLight.position.set(5, 10, 7);
+        scene.add(mainLight);
+
+        const blueLight = new THREE.PointLight(0x007bff, 80);
+        blueLight.position.set(-5, 0, 5);
+        scene.add(blueLight);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        // --- Materials ---
+        const materialSolid = new THREE.MeshPhysicalMaterial({
+            color: 0x007bff,
+            metalness: 0.2,
+            roughness: 0.3,
+            flatShading: true, // Highlights the spikes better
+            side: THREE.DoubleSide
+        });
+
+        const materialWire = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.1
+        });
+
+        // --- Geometry Data ---
+        const meshes = { sphere: null, torus: null };
+        let currentShape = 'sphere';
+
+        // Helper for pseudo-random noise based on position
+        function getNoise(x, y, z) {
+            return Math.sin(x * 5.0) * Math.cos(y * 5.0) * Math.sin(z * 5.0);
+        }
+
+        // 1. SPHERE GENERATION
+        function createSphere() {
+            // High segment count for spikes
+            const geometry = new THREE.SphereGeometry(1.5, 128, 128);
+            const count = geometry.attributes.position.count;
+            const posAttr = geometry.attributes.position;
+            
+            // Store base positions (The perfect sphere state)
+            const basePos = new Float32Array(count * 3);
+            // Store noise factors for each vertex
+            const noiseFactors = new Float32Array(count);
+
+            for(let i = 0; i < count; i++) {
+                const x = posAttr.getX(i);
+                const y = posAttr.getY(i);
+                const z = posAttr.getZ(i);
+
+                basePos[i*3] = x;
+                basePos[i*3+1] = y;
+                basePos[i*3+2] = z;
+
+                // Calculate a noise value for this vertex
+                noiseFactors[i] = getNoise(x, y, z);
+            }
+
+            geometry.userData = { basePos, noiseFactors };
+            
+            const mesh = new THREE.Mesh(geometry, materialSolid);
+            mesh.add(new THREE.Mesh(geometry, materialWire)); // Wireframe overlay
+            return mesh;
+        }
+
+        // 2. TORUS GENERATION
+        function createTorus() {
+            // TorusGeometry(radius, tube, radialSegments, tubularSegments)
+            const majorRadius = 1.8;
+            const minorRadius = 0.6;
+            const geometry = new THREE.TorusGeometry(majorRadius, minorRadius, 48, 100);
+            
+            const count = geometry.attributes.position.count;
+            const posAttr = geometry.attributes.position;
+            
+            // Store base data to calculate "collapse"
+            const basePos = new Float32Array(count * 3);
+            const noiseFactors = new Float32Array(count);
+            // Store vector from Ring Center to Surface (to scale tube thickness)
+            const tubeVectors = new Float32Array(count * 3); 
+
+            for(let i = 0; i < count; i++) {
+                const x = posAttr.getX(i);
+                const y = posAttr.getY(i);
+                const z = posAttr.getZ(i);
+                
+                basePos[i*3] = x;
+                basePos[i*3+1] = y;
+                basePos[i*3+2] = z;
+
+                // --- Calculate Tube Collapse Vector ---
+                // The torus lies on the XY plane.
+                // The "Core Ring" is at distance majorRadius from (0,0,0) in the XY plane.
+                const angle = Math.atan2(y, x); // Angle around Z axis
+                
+                // Position of the center of the tube at this angle
+                const coreX = Math.cos(angle) * majorRadius;
+                const coreY = Math.sin(angle) * majorRadius;
+                const coreZ = 0;
+
+                // Vector from core to vertex (The "Thickness" vector)
+                tubeVectors[i*3] = x - coreX;
+                tubeVectors[i*3+1] = y - coreY;
+                tubeVectors[i*3+2] = z - coreZ;
+
+                // --- Noise ---
+                noiseFactors[i] = getNoise(x, y, z);
+            }
+
+            geometry.userData = { basePos, tubeVectors, noiseFactors, majorRadius };
+            
+            const mesh = new THREE.Mesh(geometry, materialSolid);
+            mesh.add(new THREE.Mesh(geometry, materialWire));
+            return mesh;
+        }
+
+        // --- Init Shapes ---
+        meshes.sphere = createSphere();
+        meshes.torus = createTorus();
+        
+        // Add to scene but manage visibility
+        scene.add(meshes.sphere);
+        scene.add(meshes.torus);
+        meshes.torus.visible = false;
+
+        // --- Interaction Logic ---
+        window.setShape = (shape) => {
+            currentShape = shape;
+            
+            // Toggle Visibility
+            meshes.sphere.visible = (shape === 'sphere');
+            meshes.torus.visible = (shape === 'torus');
+
+            // UI Update
+            document.getElementById('btn-sphere').className = (shape === 'sphere') ? 'active' : '';
+            document.getElementById('btn-torus').className = (shape === 'torus') ? 'active' : '';
+
+            // Slider Reset (Optional, keeping at current value usually feels smoother)
+            // But let's trigger text update
+            updateInfoText();
+        };
+
+        function updateInfoText() {
+            const info = document.getElementById('info-box');
+            const sliderVal = document.getElementById('ghSlider').value;
+            
+            if (currentShape === 'sphere') {
+                info.innerHTML = `
+                    <strong>Case 1: Metric Distortion</strong><br>
+                    As the slider moves to the left ($d \\to 0$), the spikes (metric noise) vanish.
+                    <br><br>
+                    <span class="math-term">Limit:</span> A perfectly smooth Riemannian Sphere.
+                `;
+            } else {
+                info.innerHTML = `
+                    <strong>Case 2: Dimension Collapse</strong><br>
+                    As the slider moves to the left ($d \\to 0$), the torus gets thinner and thinner.
+                    <br><br>
+                    <span class="math-term">Limit:</span> The metric space converges to a Circle ($S^1$).
+                `;
+            }
+        }
+        
+        // Initial call
+        updateInfoText();
+
+        // --- Animation Loop ---
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+
+            // Get Slider Value (0 to 1)
+            // 1 = High Distance (Spiky/Thick), 0 = Convergence (Smooth/Thin)
+            const d = parseFloat(document.getElementById('ghSlider').value);
+
+            // 1. UPDATE SPHERE
+            if (currentShape === 'sphere') {
+                const mesh = meshes.sphere;
+                const pos = mesh.geometry.attributes.position;
+                const { basePos, noiseFactors } = mesh.geometry.userData;
+                const count = pos.count;
+
+                for(let i=0; i<count; i++) {
+                    const idx = i*3;
+                    const nx = basePos[idx];
+                    const ny = basePos[idx+1];
+                    const nz = basePos[idx+2];
+                    
+                    // Base Normal vector (since it's a sphere centered at 0, pos is proportional to normal)
+                    // We simply scale the radius.
+                    // Amplitude of spikes depends on 'd'
+                    const spikeAmplitude = noiseFactors[i] * 0.4 * d; 
+                    
+                    // Apply expansion
+                    // 1.0 is base scale. spikeAmplitude adds roughness.
+                    const scale = 1.0 + spikeAmplitude;
+
+                    pos.setXYZ(i, nx * scale, ny * scale, nz * scale);
+                }
+                pos.needsUpdate = true;
+                mesh.rotation.y += 0.002;
+            }
+
+            // 2. UPDATE TORUS
+            if (currentShape === 'torus') {
+                const mesh = meshes.torus;
+                const pos = mesh.geometry.attributes.position;
+                const { basePos, tubeVectors, noiseFactors, majorRadius } = mesh.geometry.userData;
+                const count = pos.count;
+
+                for(let i=0; i<count; i++) {
+                    const idx = i*3;
+                    
+                    // Reconstruct Core Ring position (implied from basePos logic)
+                    // Actually easier: FinalPos = CorePos + TubeVector * scale
+                    const tx = tubeVectors[idx];
+                    const ty = tubeVectors[idx+1];
+                    const tz = tubeVectors[idx+2];
+
+                    // Core Position
+                    const cx = basePos[idx] - tx;
+                    const cy = basePos[idx+1] - ty;
+                    const cz = basePos[idx+2] - tz;
+
+                    // Scale logic:
+                    // If d=1, scale = 1.0 (Full thickness) + Noise
+                    // If d=0, scale = 0.01 (Very thin line) + No Noise
+                    
+                    const minThickness = 0.02; // Don't go absolute 0 to avoid rendering glitches
+                    const thickness = minThickness + (d * 0.98); // Lerp from 0.02 to 1.0
+                    
+                    const noise = noiseFactors[i] * 0.3 * d; // Noise fades as d -> 0
+
+                    const scale = thickness + noise;
+
+                    pos.setXYZ(i, 
+                        cx + tx * scale,
+                        cy + ty * scale,
+                        cz + tz * scale
+                    );
+                }
+                pos.needsUpdate = true;
+                mesh.rotation.x = -Math.PI / 6; // Tilted to face camera
+                mesh.rotation.y += 0.002;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Window Resize Handling
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Listen for slider changes for text update
+        document.getElementById('ghSlider').addEventListener('input', updateInfoText);
+
+    </script>
+</body>
+</html>

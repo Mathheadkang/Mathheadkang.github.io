@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GH Torus Collapse - GIF Generator</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            background: #1a1a1a; 
+        }
+        canvas { display: block; }
+        #status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: monospace;
+            background: rgba(0,0,0,0.5);
+            padding: 5px;
+        }
+    </style>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ccapture.js-npmfixed@1.1.0/build/CCapture.all.min.js"></script>
+</head>
+<body>
+    <div id="status">Initializing...</div>
+
+<script>
+    // --- 1. THREE.JS SCENE SETUP ---
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a1a);
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0, 4, 8);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(2);
+    document.body.appendChild(renderer.domElement);
+
+    // --- LIGHTING ---
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+    
+    const mainLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    mainLight.position.set(5, 10, 7);
+    scene.add(mainLight);
+
+    const blueLight = new THREE.PointLight(0x007bff, 10);
+    blueLight.position.set(-5, 0, 5);
+    scene.add(blueLight);
+
+    // --- MATERIALS ---
+    const materialSolid = new THREE.MeshPhysicalMaterial({
+        color: 0x007bff,
+        metalness: 0.8,
+        roughness: 1.0,
+        flatShading: true,
+        side: THREE.DoubleSide
+    });
+
+    const materialWire = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.1
+    });
+
+    // --- TORUS GENERATION ---
+    let torusMesh;
+
+    function getNoise(x, y, z) {
+        return Math.sin(x * 5.0) * Math.cos(y * 5.0) * Math.sin(z * 5.0);
+    }
+
+    function createTorus() {
+        const majorRadius = 1.8;
+        const minorRadius = 0.6;
+        const geometry = new THREE.TorusGeometry(majorRadius, minorRadius, 48, 100);
+        
+        const count = geometry.attributes.position.count;
+        const posAttr = geometry.attributes.position;
+        
+        const basePos = new Float32Array(count * 3);
+        const noiseFactors = new Float32Array(count);
+        const tubeVectors = new Float32Array(count * 3); 
+
+        for(let i = 0; i < count; i++) {
+            const x = posAttr.getX(i);
+            const y = posAttr.getY(i);
+            const z = posAttr.getZ(i);
+            
+            basePos[i*3] = x;
+            basePos[i*3+1] = y;
+            basePos[i*3+2] = z;
+
+            const angle = Math.atan2(y, x);
+            
+            const coreX = Math.cos(angle) * majorRadius;
+            const coreY = Math.sin(angle) * majorRadius;
+            const coreZ = 0;
+
+            tubeVectors[i*3] = x - coreX;
+            tubeVectors[i*3+1] = y - coreY;
+            tubeVectors[i*3+2] = z - coreZ;
+
+            noiseFactors[i] = getNoise(x, y, z);
+        }
+
+        geometry.userData = { basePos, tubeVectors, noiseFactors, majorRadius };
+        
+        const mesh = new THREE.Mesh(geometry, materialSolid);
+        mesh.add(new THREE.Mesh(geometry, materialWire));
+        
+        // Initial rotation
+        mesh.rotation.x = -Math.PI / 6; 
+        
+        return mesh;
+    }
+
+    torusMesh = createTorus();
+    scene.add(torusMesh);
+
+    // --- ANIMATION STATE ---
+    let frameCount = 0;
+    const maxFrames = 50; // Duration of the collapse animation
+    let isRecording = false;
+
+    // --- RECORDING SETUP ---
+    const capturer = new CCapture({ 
+        format: 'webm', 
+        framerate: 30,
+        verbose: true
+    });
+
+    function startRecording() {
+        document.getElementById('status').innerText = "Recording GIF... Please wait.";
+        isRecording = true;
+        capturer.start();
+    }
+
+    function stopRecording() {
+        if (!isRecording) return;
+        isRecording = false;
+        capturer.stop();
+        capturer.save();
+        document.getElementById('status').innerText = "Done! Check for download.";
+    }
+
+    // --- ANIMATION LOOP ---
+    function animate() {
+        requestAnimationFrame(animate);
+
+        // Calculate d based on frame count
+        // We want d to go from 1 to 0
+        let d = 1;
+        if (isRecording) {
+            d = 1 - (frameCount / maxFrames);
+            if (d < 0) d = 0;
+        }
+
+        // Update Torus Geometry
+        const mesh = torusMesh;
+        const pos = mesh.geometry.attributes.position;
+        const { basePos, tubeVectors, noiseFactors } = mesh.geometry.userData;
+        const count = pos.count;
+
+        for(let i=0; i<count; i++) {
+            const idx = i*3;
+            
+            const tx = tubeVectors[idx];
+            const ty = tubeVectors[idx+1];
+            const tz = tubeVectors[idx+2];
+
+            const cx = basePos[idx] - tx;
+            const cy = basePos[idx+1] - ty;
+            const cz = basePos[idx+2] - tz;
+
+            const minThickness = 0.02;
+            const thickness = minThickness + (d * 0.98);
+            
+            const noise = noiseFactors[i] * 0.3 * d;
+
+            const scale = thickness + noise;
+
+            pos.setXYZ(i, 
+                cx + tx * scale,
+                cy + ty * scale,
+                cz + tz * scale
+            );
+        }
+        pos.needsUpdate = true;
+        
+        // Rotate slightly
+        mesh.rotation.y += 0.005;
+
+        renderer.render(scene, camera);
+        
+        if (isRecording) {
+            capturer.capture(renderer.domElement);
+            frameCount++;
+            
+            if (frameCount >= maxFrames) {
+                stopRecording();
+            }
+        }
+    }
+
+    // Start automatically after 1 second
+    setTimeout(startRecording, 1000);
+
+    animate();
+    
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+</script>
+</body>
+</html>
