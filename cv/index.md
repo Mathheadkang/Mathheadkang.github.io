@@ -6,7 +6,7 @@ permalink: /cv/
 
 
 
-[Download CV (PDF)](assets/pdfs/Xiaokang_Wang_s_CV_for_academic_jobs.pdf)
+[Download CV (PDF)](/assets/pdfs/Xiaokang_Wang_s_CV_for_academic_jobs.pdf)
 
 ## Education
 
@@ -18,7 +18,7 @@ Area: Geometric Analysis
 - GPA: 4.00/4.00
 
 **University of California, Berkeley, USA**  
-International Student  
+Visiting Student  
 *Sep 2019 - Jan 2020*
 
 **Southern University of Science and Technology, China**  

@@ -11,12 +11,12 @@ Broadly speaking, my research interest focuses on understanding special metrics 
 - [The The Moduli space of locally conformally flat manifolds](#the-moduli-space-of-locally-conformally-flat-manifolds)
 - [Generalized Curvature Flows](#generalized-curvature-flows)
 
-## The Moduli space of locally conformally flat manifolds
+## The Moduli Space of Locally Conformally Flat Manifolds
 
 # Sections
 - [Introduction](#1-introduction)
 - [Wang 2025](#2-on-the-structure-of-locally-conformally-flat-orbifolds-and-ale-metrics)
-- [Viaclovsky-Wang 2026](#3-collapsing-yamabe-metrics-with-jeff-viaclovsky-in-preperation)
+- [Viaclovsky-Wang 2026](#3-collapsing-yamabe-metrics-with-jeff-viaclovsky-in-preparation)
 - [Future work](#4-future-work)
 
 # 1: Introduction
@@ -69,7 +69,7 @@ If $(M^n,g)$ is an LCF compact orbifold with positive scalar curvature,
 then there exists a solution $\tilde{g} = u^\frac{4}{n-2} g$ to the orbifold Yamabe problem on $(M,g)$. 
 
 The result is interesting because the orbifold Yamabe problem is not solvable in full generality. [Viaclovsky](https://aif.centre-mersenne.org/articles/10.5802/aif.2617/) exhibits a counterexample.
-# 3: Collapsing Yamabe metrics (With Jeff Viaclovsky, In preperation)
+# 3: Collapsing Yamabe metrics (with Jeff Viaclovsky, in preparation)
 If we set $\mu_0=0$, so that we only assume the Yamabe invariant satisfies $Y(M,[g])>0$, we denote the corresponding moduli space by $\mathfrak{M}(n,0^+,C_0)$. In this regime genuine degenerations can occur. In the sequel we study collapsing phenomena for sequences of Yamabe metrics; the metrics need not be locally conformally flat, only of constant scalar curvature. We develop some new degeneration examples which is not known in other area. Many of the statements below extend to nonpositive Yamabe classes, but for brevity we state here the positive‑Yamabe results.
 
 **Definition** 
@@ -94,7 +94,7 @@ Then, for $i$ large, there exists $g'_i$ such that:
 Next, we present a gluing construction of collapsing constant‑scalar‑curvature metrics, in the spirit of [D.Joyce](https://onlinelibrary.wiley.com/doi/10.1155/S016117120310806X). The novelty is that one or both pieces are allowed to collapse while keeping the constant scalar curvature unchanged. More precisely, we prove the following:
 
 **Theorem (Via-W, 26)**
-Let $\{(M_i,g_i)\}$ be a $S(n,d,C,D,\delta)$-spectural admissible sequence, $\{N_i,h_i)\}$ be a $S(n,k,C,D,\delta)$-spectural admissible sequence, with corresponding limits as $i\to\infty$, $(X^d, g_\infty)$, $(Y^k,h_\infty)$, with $d,k\geq 3$. Then, for $i$-sufficiently large, there will be a sequence of metrics $(M_i$`#`$N_i, \hat{g}_i)$, such that:
+Let $\{(M_i,g_i)\}$ be a $S(n,d,C,D,\delta)$-spectral admissible sequence, $\{N_i,h_i)\}$ be a $S(n,k,C,D,\delta)$-spectral admissible sequence, with corresponding limits as $i\to\infty$, $(X^d, g_\infty)$, $(Y^k,h_\infty)$, with $d,k\geq 3$. Then, for $i$-sufficiently large, there will be a sequence of metrics $(M_i \# N_i, \hat{g}_i)$, such that:
 - The scalar curvature $R(\hat{g}_i)\equiv 1$;
 - The sequence converges to $(X\wedge Y, l)$ in the Gromov-Hausdorff sense, where $l_{X} = g_\infty$ and $l_{Y} = h_\infty$.
 

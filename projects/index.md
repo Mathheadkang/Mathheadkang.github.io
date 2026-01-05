@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Project
-permalink: /project/
+title: Projects
+permalink: /projects/
 ---
 
-See my GitHub page: [Github](https://github.com/Mathheadkang)
+Visit my GitHub profile: [GitHub](https://github.com/Mathheadkang)
 
 ![Banana](../assets/images/dancing-banana.gif)

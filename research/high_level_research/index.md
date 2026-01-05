@@ -6,10 +6,10 @@ permalink: /research/introduction/
 
 # Description
 
-My research focus on the objects called "[Manifold](https://en.wikipedia.org/wiki/Manifold)", which you may think they are higher dimensional "surfaces".
-- **Definition**: a *Manifold* is space that around each point it "likes" Euclidean space.
+My research focuses on objects called "[Manifolds](https://en.wikipedia.org/wiki/Manifold)", which you can think of as higher-dimensional "surfaces".
+- **Definition**: A *Manifold* is a space that locally resembles Euclidean space.
 
-One sentence to summerize my research:
+One sentence to summarize my research:
 - My research explores the "universe" of all possible geometric shapes on manifolds, classifying how complex spaces can collapse into extreme boundaries and proving how they evolve over time to reveal their fundamental structure.
 
 # Contents
@@ -20,84 +20,83 @@ One sentence to summerize my research:
 - [Study of Moduli space: Flow Method](#study-of-moduli-space-flow-method)
 
 # Geometry and Topology
-I will introduce two concepts first: Geometry and Topology
+I will introduce two concepts first: Geometry and Topology.
 
-Let's fix our discussion on 2 dimension surfaces for now. In dimension one, there is actually no geometry. All of the "closed" 1 dimensional curves are just loops, they are "equivalent" geometrically and topologically. In dimension 2, we call a 2 dimensional manifold a *surface*. Below are some examples of surfaces.
+Let's restrict our discussion to two-dimensional surfaces for now. In dimension one, there is actually no geometry. All closed 1-dimensional curves are just loops; they are equivalent geometrically and topologically. In dimension 2, we call a 2-dimensional manifold a *surface*. Below are some examples of surfaces.
 ![Riemann_surface](../../assets/images/Riemann_surfaces.png)
 ## What is Topology?
-*Topology* is the study of shape in a very relaxed sense. Two objects are topologically the same if you can turn one into the other using only those allowed moves. Topology ignores exact sizes and distances.
+*Topology* is the study of shape in a very relaxed sense. Two objects are topologically the same if you can turn one into the other using only allowed moves. Topology ignores exact sizes and distances.
 It only cares about *connectivity* and *holes*.
 
 Imagine objects made of perfectly stretchy rubber:
-- You are allowed to stretch, bend, twist, and squish
+- You are allowed to stretch, bend, twist, and squish.
 - You are not allowed to:
 - tear the object
 - glue parts together
 - punch new holes
 
-Try <a href="{{ site.baseurl }}/research/high_level_research/surface_deformation.html"><button type="button">Surface Deformation</button></a> yourself! 
+Try the <a href="{{ site.baseurl }}/research/high_level_research/surface_deformation.html"><button type="button">Surface Deformation</button></a> visualization yourself! 
 
 ![surface deformation](../../assets/images/surface_deformation.gif)
 
-You may have a cool observation: 
-- If two (closed) surfaces are topologically equivalent if they have the same number of "holes".
+You may observe that two closed surfaces are topologically equivalent if they have the same number of "holes".
 
-This is absolutely correct. In dimension 2, the reverse direction is also correct:
-- If two (closed) surfaces have the same number of "holes", then they are topologically equivalent.
+This is correct. In dimension 2, the converse is also true:
+- If two closed surfaces have the same number of "holes", they are topologically equivalent.
 
-So the number of holes is a permanent fingerprint. Mathematically, this is called [Genus](https://en.wikipedia.org/wiki/Genus_(mathematics)), which is the simplest *topological invariant*. 
+Thus, the number of holes is a permanent topological fingerprint. Mathematically, this is called [Genus](https://en.wikipedia.org/wiki/Genus_(mathematics)), which is the simplest *topological invariant*. 
 
-You may see the topology in this case is "discrete" in nature (Genus can only be positive integers instead of real number).
+You can see that topology in this case is "discrete" in nature (Genus allows only non-negative integers).
 
 ## What is Geometry?
-If we view topology property is something which is "soft", then *Geometry* is the "hard" contrary. For topological property, we ignore "wrinkles", "bumps" and other weird distortions. But for geometric property, we care.
-The simplest "hard" object on surfaces is *distance* of two points.
+If we view topological properties as "soft", then *Geometry* provides the "hard" contrast. In topology, we ignore "wrinkles", "bumps", and distortions. But in geometry, these features matter.
+The most fundamental geometric quantity on a surface is the *distance* between two points.
 
-How can we define the distance on a surface? Recall on Euclidean space, we have: 
-- Among curves connecting two points, the straight line is the shortest.
+How can we define the distance on a surface? Recall that in Euclidean space: 
+- Among curves connecting two points, the straight line segment is the shortest.
 
-Thus the distance between two points are defined to be the length of the straight line segment connecting two points. 
+Thus, the distance between two points is defined as the length of the straight line segment connecting them. 
 
-On surfaces, we use similar definition:
+On surfaces, we use a similar definition:
 - The distance between two points is the minimal length among all curves connecting these two points.
 
-Now, we are ready to see an example distinguishes geometry and topology:
+Now we can see an example that distinguishes geometry from topology:
 
 ![geodesic](../../assets/images/geodesic_sphere.png)
 
-Take the picture for example. A "sphere" is topologically equivalent to a "potato", since there is no hole at all. But the disance between the "north pole" and "south pole" are not the same. Thus, distance is not a topological property, it tides with the shape.
+Take the picture above for example. A "sphere" is topologically equivalent to a "potato" (as neither has holes). But the distance between the "north pole" and "south pole" differs. Thus, distance is not a topological property; it is tied to the shape.
 
-We see different "shape" admits different distance between points. We shall call the "shape" as [metric](https://en.wikipedia.org/wiki/Riemannian_manifold), as it determines distance. We can say in the <a href="surface_deformation.html"><button type="button">Surface Deformation</button></a> you produce a lot of different metrics on the same surface.
+We see that different "shapes" determine different distances. We call the "shape" a [metric](https://en.wikipedia.org/wiki/Riemannian_manifold), as it determines distance. In the <a href="surface_deformation.html"><button type="button">Surface Deformation</button></a>, you produce many different metrics on the same surface.
 
-You may see the geometry is "continuous" in nature (We can continuously deform a surface without changing its topology). 
+Notice that geometry is "continuous" in nature (we can continuously deform a surface's shape without changing its topology). 
 
 # Metric Equivalence
-As a differential geometor, I am more interested in metrics. We see that a surface can admit a lot metrics. Here is a big problem:
+As a differential geometer, I am more interested in metrics. We see that a surface can admit many metrics. Here is a big problem:
 - How can we distinguish two metrics?
 
 This question is hard. I will answer this question in two steps.
 
 ## Metric Local Equivalence: Curvature
-We can first formulate it locally. What I mean is
+We can first formulate this locally:
 - How can we distinguish two metrics near the same point, say the origin?
 
-Previously, we have seen a metric can determine the distance. But it is a complicated function and not "local" enough. One may think we can let the neighborhood to shrink to the origin. However, since surface is locally "like" Euclidean space $\mathbb{R}^2$, at the origin, it should be exactly Eculidean space, which is the same for each point. So distance is not a suitable invariant.
+Previously, we have seen a metric can determine the distance. But it is a complicated function and not "local" enough. One may think we can let the neighborhood shrink to the origin. However, since a surface is locally "like" Euclidean space $\mathbb{R}^2$, at the origin, it infinitesimally resembles Euclidean space. So distance is not a suitable local invariant.
 
 ![Curvature_locally](../../assets/images/local_curvature.png)
 
-Then, what should be the correct invariant? If you take a look at the picture above, you can observe the difference: the left picture is more "spiky" and right picture is "flatter". In geometry, there is a concept to decribe it: [*curvature*](https://en.wikipedia.org/wiki/Curvature). 
-- Curvature describe how manifold is "bent" at each point and is a local invariant.
+Then, what is the correct invariant? In the picture above, the left surface is "spikier" while the right is "flatter". In geometry, there is a concept to describe it: [*curvature*](https://en.wikipedia.org/wiki/Curvature). 
+- Curvature describes how a manifold is "bent" at each point; it is a local invariant.
 
-In the surface case, we can consider "curvature" is a number defined at each point, whose value is how "spiky" it is around this point.
+In the surface case, we can consider "curvature" as a number defined at each point, indicating how "spiky" the surface is around that point.
 
-## Metric Global Equivalence
+## Global Metric Equivalence
 
-If you agree with this local picture, we can move on to the global question. Think about these two metrics on sphere:
+If you agree with this local picture, we can move on to the global question. Consider these two metrics on the sphere:
 ![Two_metrics](../../assets/images/two_metrics.png)
 
-These two "spiky" spheres are exactly the same surfaces, but just differ by an angle. However, if we look at the corresponding point on the right of the red dot on the left (not the red dot on the right since they are differ by an angle). The curvatures are different, hence these two metric locally are not equivalent. But can we say these two metrics are not equivalent? They are exactly the same "spiky" spheres but in a different angle!!
+These two "spiky" spheres are effectively the same shape, just rotated. However, if we compare the curvature at a fixed coordinate (e.g., the red dot's position) on both spheres, the values might differ because the "spike" has moved. Locally, the metrics appear different. But globally, the spheres are isometric—they are the same shape, just rotated.
 
-Motivate from this, we need to be more careful about what we mean "metric equivalence". 
+Motivated by this, we need to carefully define "metric equivalence". 
 
 - Two metrics are equivalent if they are only differed by a "rotation".
 
