@@ -6,6 +6,8 @@ permalink: /blog/
 
 Here are my research notes and articles:
 
+<img src="assets/images/background.jpg" alt="background" width="200">
+
 <ul>
   {% for post in site.posts %}
     <li>
