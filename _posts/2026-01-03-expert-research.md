@@ -94,7 +94,7 @@ Then, for $i$ large, there exists $g'_i$ such that:
 Next, we present a gluing construction of collapsing constant‑scalar‑curvature metrics, in the spirit of [D.Joyce](https://onlinelibrary.wiley.com/doi/10.1155/S016117120310806X). The novelty is that one or both pieces are allowed to collapse while keeping the constant scalar curvature unchanged. More precisely, we prove the following:
 
 **Theorem (Via-W, 26)**
-Let $\{(M_i,g_i)\}$ be a $S(n,d,C,D,\delta)$-spectral admissible sequence, $\{N_i,h_i)\}$ be a $S(n,k,C,D,\delta)$-spectral admissible sequence, with corresponding limits as $i\to\infty$, $(X^d, g_\infty)$, $(Y^k,h_\infty)$, with $d,k\geq 3$. Then, for $i$-sufficiently large, there will be a sequence of metrics $(M_i \# N_i, \hat{g}_i)$, such that:
+Let $\{(M_i,g_i)\}$ be a $S(n,d,C,D,\delta)$-spectral admissible sequence, $\{N_i,h_i)\}$ be a $S(n,k,C,D,\delta)$-spectral admissible sequence, with corresponding limits as $i\to\infty$, $(X^d, g_\infty)$, $(Y^k,h_\infty)$, with $d,k\geq 3$. Then, for $i$-sufficiently large, there will be a sequence of metrics $(M_i$ `#` $N_i, \hat{g}_i)$, such that:
 - The scalar curvature $R(\hat{g}_i)\equiv 1$;
 - The sequence converges to $(X\wedge Y, l)$ in the Gromov-Hausdorff sense, where $l_{X} = g_\infty$ and $l_{Y} = h_\infty$.
 
