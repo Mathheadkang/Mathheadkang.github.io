@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: Introduction
 permalink: /research/introduction/
 ---
@@ -23,7 +23,7 @@ One sentence to summarize my research:
 I will introduce two concepts first: Geometry and Topology.
 
 Let's restrict our discussion to two-dimensional surfaces for now. In dimension one, there is actually no geometry. All closed 1-dimensional curves are just loops; they are equivalent geometrically and topologically. In dimension 2, we call a 2-dimensional manifold a *surface*. Below are some examples of surfaces.
-![Riemann_surface](../../assets/images/Riemann_surfaces.png)
+![Riemann_surface](/assets/images/Riemann_surfaces.png)
 ## What is Topology?
 *Topology* is the study of shape in a very relaxed sense. Two objects are topologically the same if you can turn one into the other using only allowed moves. Topology ignores exact sizes and distances.
 It only cares about *connectivity* and *holes*.
@@ -35,9 +35,10 @@ Imagine objects made of perfectly stretchy rubber:
 - glue parts together
 - punch new holes
 
-Try the <a href="{{ site.baseurl }}/research/high_level_research/surface_deformation.html"><button type="button">Surface Deformation</button></a> visualization yourself! 
+Try the <a href="{{ site.baseurl }}/assets/htmls/surface_deformation.html"><button type="button">Surface Deformation</button></a>visualization yourself! 
 
-![surface deformation](../../assets/images/surface_deformation.gif)
+
+![surface deformation](/assets/images/surface_deformation.gif)
 
 You may observe that two closed surfaces are topologically equivalent if they have the same number of "holes".
 
@@ -62,11 +63,11 @@ On surfaces, we use a similar definition:
 
 Now we can see an example that distinguishes geometry from topology:
 
-![geodesic](../../assets/images/geodesic_sphere.png)
+![geodesic](/assets/images/geodesic_sphere.png)
 
 Take the picture above for example. A "sphere" is topologically equivalent to a "potato" (as neither has holes). But the distance between the "north pole" and "south pole" differs. Thus, distance is not a topological property; it is tied to the shape.
 
-We see that different "shapes" determine different distances. We call the "shape" a [metric](https://en.wikipedia.org/wiki/Riemannian_manifold), as it determines distance. In the <a href="surface_deformation.html"><button type="button">Surface Deformation</button></a>, you produce many different metrics on the same surface.
+We see that different "shapes" determine different distances. We call the "shape" a [metric](https://en.wikipedia.org/wiki/Riemannian_manifold), as it determines distance. In the <a href="{{ site.baseurl }}/assets/htmls/surface_deformation.html"><button type="button">Surface Deformation</button></a>, you produce many different metrics on the same surface.
 
 Notice that geometry is "continuous" in nature (we can continuously deform a surface's shape without changing its topology). 
 
@@ -82,7 +83,7 @@ We can first formulate this locally:
 
 Previously, we have seen a metric can determine the distance. But it is a complicated function and not "local" enough. One may think we can let the neighborhood shrink to the origin. However, since a surface is locally "like" Euclidean space $\mathbb{R}^2$, at the origin, it infinitesimally resembles Euclidean space. So distance is not a suitable local invariant.
 
-![Curvature_locally](../../assets/images/local_curvature.png)
+![Curvature_locally](/assets/images/local_curvature.png)
 
 Then, what is the correct invariant? In the picture above, the left surface is "spikier" while the right is "flatter". In geometry, there is a concept to describe it: [*curvature*](https://en.wikipedia.org/wiki/Curvature). 
 - Curvature describes how a manifold is "bent" at each point; it is a local invariant.
@@ -92,7 +93,7 @@ In the surface case, we can consider "curvature" as a number defined at each poi
 ## Global Metric Equivalence
 
 If you agree with this local picture, we can move on to the global question. Consider these two metrics on the sphere:
-![Two_metrics](../../assets/images/two_metrics.png)
+![Two_metrics](/assets/images/two_metrics.png)
 
 These two "spiky" spheres are effectively the same shape, just rotated. However, if we compare the curvature at a fixed coordinate (e.g., the red dot's position) on both spheres, the values might differ because the "spike" has moved. Locally, the metrics appear different. But globally, the spheres are isometric—they are the same shape, just rotated.
 
@@ -132,14 +133,14 @@ It is still kind of abstract. Let's see some examples.
 The first example: If you still remember the case that two indentical spiky spheres with different rotation angle. Then what is the Gromov-Hausdorff distance? In fact, we can rotate one spiky sphere so that the metric after rotation is a equivalent metric to the other. Thus, their Gromov-Hausdorff distance should be 0. This is intuitively true: since they represent the "same point" in the moduli space, their distance should be 0.
 
 To get a Gromov-Hausdorff distance close example, take a look at this picture:
-![GH_close](../../assets/images/GH_close.png)
+![GH_close](/assets/images/GH_close.png)
 The spikes on the left ball is very thin. If we put both spaces into a common “room”, the spherical part are almost identical, which the spikes are almost negligible. Gromov-Hausdorff distance captures global shape while ignoring small geometric noise.
 
-Try this interactive example: <a href="{{ site.baseurl }}/research/high_level_research/GH_surface.html"><button type="button">Gromov-Hausdorff</button></a>
+Try this interactive example: <a href="{{ site.baseurl }}/assets/htmls/GH_surface.html"><button type="button">Gromov-Hausdorff</button></a>
 
-![torus_collapsing](../../assets/images/torus_collapse.gif)
+![torus_collapsing](/assets/images/torus_collapse.gif)
 
-In this example, we can continuosly deform the metric on sphere and torus in the Gromov-Hausdorff sense. Does this looks familar to you? In fact, <a href="{{ site.baseurl }}/research/high_level_research/surface_deformation.html"><button type="button">Surface Deformation</button></a> can be seen in this way: 
+In this example, we can continuosly deform the metric on sphere and torus in the Gromov-Hausdorff sense. Does this looks familar to you? In fact, <a href="{{ site.baseurl }}/assets/htmls/surface_deformation.html"><button type="button">Surface Deformation</button></a> can be seen in this way: 
 - *the Gromov-Hausdorff distance between the moving metric and the model metric (spherical or standard torus) is becoming smaller and smaller.* 
 
 A slight difference is that in Gromov-Hausdorff sense, the metric can be closed to a different dimensional space, which means the topology is changed. As the picture shows, torus can "collapse" to a circle, which is a lower dimensional space.
@@ -157,13 +158,13 @@ One interesting question is:
 
 We have introduced the Gromov-Hausdorff distance. To say "boundary", which is like a finite distance thing, so we may need to impose some "conditions" on the metrics and consider a "subset" of metrics to avoid distance tends to infinity. I worked on a subset of the moduli space whose metrics satisfies a very natural "condition" in high dimension. 
 
-A way to understand the boundary is to find a sequence of metrics to approach to the boundary. Like in the real number, we can take a [limit](https://en.wikipedia.org/wiki/Limit_(mathematics)). Under Gromov-Hausdorff distance, we can also take a [limit](https://en.wikipedia.org/wiki/Limit_(mathematics)). But the problem is that, the limit may not be "manifold" anymore. Metric degenerations can happen, and topology will change. The "collapsing" is one type of degenerations. There are a lot of degenerations which are unknown. So one of my work can be stated in this way. See details in my [research](../Expert/index.md).
+A way to understand the boundary is to find a sequence of metrics to approach to the boundary. Like in the real number, we can take a [limit](https://en.wikipedia.org/wiki/Limit_(mathematics)). Under Gromov-Hausdorff distance, we can also take a [limit](https://en.wikipedia.org/wiki/Limit_(mathematics)). But the problem is that, the limit may not be "manifold" anymore. Metric degenerations can happen, and topology will change. The "collapsing" is one type of degenerations. There are a lot of degenerations which are unknown. So one of my work can be stated in this way. See details in my [research](/research/expert/).
 - **Theorem** Consider the moduli space satisfies the natural "condition", 
   - If we assume they are not "collapsing", in dimension 3 and 4, all of the "boundaries" are classified. In any dimension, the classification of the "boundaries" becomes an "algebraic" ([group theory](https://en.wikipedia.org/wiki/Group_theory)) problem.
   - If we allow "collapsing", new examples are discovered.
 
 An illustration of this new examples is like the one in my homepage:
-![geometry_singularity](../../assets/images/geometric_singularity.gif)
+![geometry_singularity](/assets/images/geometric_singularity.gif)
 
 We can see the left manifold is roughly "unchanged", while the right manfiold is "collapsing" to lower dimension. The "linking neck" region is shrinking to a point. 
 
@@ -185,7 +186,7 @@ For every point on a manifold, there is a curvature, which at the begining, coul
 the curvature is like "[heat](https://en.wikipedia.org/wiki/Heat)" distribution. If there is no other heat source, the heat distribution will be more and more "homogeneous", and eventually, the heat will be evenly distributed in the chamber. Ricci flow is an analog of the [heat flow](https://en.wikipedia.org/wiki/Heat_equation). Idealy, it will make everywhere on the manifold the constant curvature.
 
 You may recall this picture:
-![Ricci flow](../../assets/images/RF.gif)
+![Ricci flow](/assets/images/RF.gif)
 
 On 2 dimension sphere, you can see the "bumps" are like the curvature distribution on sphere, and Ricci flow will make the high and low curvatrue region more "spherical". In the end, it will get the desired metric with constant curvature everywhere, the round metric. With some proof, we can say:
 - A 2 dimension sphere (topological condition) admit a positive constant curvature metric.
@@ -196,7 +197,7 @@ However, this intuition fails in 3 and higher dimension. The biggest issue is th
 
 Here is an illustration of what is happening if you start a Ricci flow with a "simply connected" 3 manifold.
 
-![poincare](../../assets/images/sequential_disappearance.gif)
+![poincare](/assets/images/sequential_disappearance.gif)
 
 To wrap it up, Ricci flow solves a pure topological conjecture, which is very impressive. I will write "A higher level introduction to Poincaré conjecture" in the future.
 
@@ -205,4 +206,4 @@ Now, I want to summerize what I have done. We consider a flow which is very natu
     - The $\alpha$-Ricci flow on 2-torus will either "collapse" to a circle or to a point in the Gromov-Hausdorff distance, depending on a rationality condition initially;
     - The $\alpha$-Ricci flow with surgery on some 3 manifold will exist forever and converge to the desired metric in the Gromov-Hausdorff distance.
 
-If you are interested in the details, please take a look at my [research](../Expert/index.md).
+If you are interested in the details, please take a look at my [research](/research/expert/).

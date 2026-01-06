@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: Detailed Research
 permalink: /research/expert/
 ---
@@ -33,7 +33,7 @@ Several of my works are made towards this direction, which will be explained nex
 
 # 2: On the structure of locally conformally flat orbifolds and ALE metrics ([Wang 2025](https://arxiv.org/abs/2511.09857))
 
-When $\mu_0>0$, [Tian-Viaclovsky](https://www.sciencedirect.com/science/article/pii/S0001870804002890?via%3Dihub) shows that any sequence in $\mathfrak{M}(n,\mu_0,C_0)$ subconverges to a Riemannian multi-fold — loosely, a finite collection of orbifolds that may be identified at a finite set of points. In particular, these limiting orbifolds have strictly positive orbifold Yamabe invariant. Moreover, [Tian-Viaclovsky](https://link.springer.com/article/10.1007/s00222-004-0412-1) proves that the blow-up models at singular points are scalar-flat ALE manifolds. ![G-H convergence](./GH.png)
+When $\mu_0>0$, [Tian-Viaclovsky](https://www.sciencedirect.com/science/article/pii/S0001870804002890?via%3Dihub) shows that any sequence in $\mathfrak{M}(n,\mu_0,C_0)$ subconverges to a Riemannian multi-fold — loosely, a finite collection of orbifolds that may be identified at a finite set of points. In particular, these limiting orbifolds have strictly positive orbifold Yamabe invariant. Moreover, [Tian-Viaclovsky](https://link.springer.com/article/10.1007/s00222-004-0412-1) proves that the blow-up models at singular points are scalar-flat ALE manifolds. ![G-H convergence](/assets/images/GH.png)
 
 To analyze these limits we establish the following structure theorem.
 
@@ -98,7 +98,7 @@ Let $\{(M_i,g_i)\}$ be a $S(n,d,C,D,\delta)$-spectral admissible sequence, $\{N_
 - The scalar curvature $R(\hat{g}_i)\equiv 1$;
 - The sequence converges to $(X\wedge Y, l)$ in the Gromov-Hausdorff sense, where $l_{X} = g_\infty$ and $l_{Y} = h_\infty$.
 
-![Collapsing example](collapsing_example.png)
+![Collapsing example](/assets/images/collapsing_example.png)
 This yields the first example of degeneration to the wedge sum of two manifolds of different dimensions while preserving the constant-scalar-curvature condition. The degeneration described above can indeed occur in the moduli space $\mathfrak{M}(n,0^+,C_0)$. Unlike the Einstein setting, the Ricci curvature need not be uniformly bounded from below: in our construction the blow-down of the neck region has Ricci curvature tending to $-\infty$. Note that the curvature blow-up in this construction occurs only at isolated points.
 # 4: Future work
 We aim to compactify the moduli space $\mathfrak{M}(n,0^+,C_0)$ and to fully describe the degeneration behavior as metrics approach the boundary of the moduli space. A central analytic input is an $\varepsilon$-regularity statement for LCF manifolds assuming only a positive Yamabe invariant.
@@ -164,7 +164,8 @@ In this work we introduce a family of generalized curvature flows, which we call
 $$\left\{\begin{aligned}
 	\frac{\partial }{\partial t}g=&-2\operatorname{Ric}+\tfrac{1}{2}\alpha\otimes\alpha\\
 	\frac{\partial }{\partial t}\alpha=&-dd^*_g\alpha
-\end{aligned}\right.$$
+\end{aligned}
+\right.$$
 
 We first develop the analytic framework in close analogy with the Ricci flow. In addition to the standard PDE results — short‑time existence, smoothing estimates, and continuation criteria — the flow enjoys several structural properties that are crucial for the global analysis. These properties are collected in the following theorem.
 
@@ -211,7 +212,7 @@ et $(g(t),\alpha(t))$ be a solution to the $\alpha$-Ricci flow on $\mathbb{T}^2$
 - If $\frac{a}{b}\in \mathbb{R}\setminus\mathbb{Q}$ or $a=b=0$, then  $(M,\frac{g(t)}{t})$ converges to a point in the Gromov-Hausdorff topology.
 
 This is illustrated as the following:
-![alpha torus](./alpha_torus.png)
+![alpha torus](/assets/images/alpha_torus.png)
 
 # 5: Future work
 
