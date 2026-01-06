@@ -197,7 +197,7 @@ However, this intuition fails in 3 and higher dimension. The biggest issue is th
 
 Here is an illustration of what is happening if you start a Ricci flow with a "simply connected" 3 manifold.
 
-[comment]: <> (![poincare](/assets/images/sequential_disappearance.gif)
+<!-- ![poincare](/assets/images/sequential_disappearance.gif) -->
 
 <img src="{{ site.baseurl }}/assets/images/sequential_disappearance.gif" alt="poincare" width="500">
 
