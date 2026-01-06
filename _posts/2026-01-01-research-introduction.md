@@ -199,7 +199,7 @@ Here is an illustration of what is happening if you start a Ricci flow with a "s
 
 <!-- ![poincare](/assets/images/sequential_disappearance.gif) -->
 
-<img src="{{ site.baseurl }}/assets/images/sequential_disappearance.gif" alt="poincare" width="500">
+<img src="{{ site.baseurl }}/assets/images/sequential_disappearance.gif" alt="poincare" width="800">
 
 To wrap it up, Ricci flow solves a pure topological conjecture, which is very impressive. I will write "A higher level introduction to Poincaré conjecture" in the future.
 
