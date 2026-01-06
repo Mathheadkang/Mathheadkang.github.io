@@ -197,7 +197,9 @@ However, this intuition fails in 3 and higher dimension. The biggest issue is th
 
 Here is an illustration of what is happening if you start a Ricci flow with a "simply connected" 3 manifold.
 
-![poincare](/assets/images/sequential_disappearance.gif)
+[comment]: <> (![poincare](/assets/images/sequential_disappearance.gif)
+
+<img src="{{ site.baseurl }}/assets/images/sequential_disappearance.gif" alt="poincare" width="500">
 
 To wrap it up, Ricci flow solves a pure topological conjecture, which is very impressive. I will write "A higher level introduction to Poincaré conjecture" in the future.
 
