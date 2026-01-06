@@ -11,6 +11,7 @@ kramdown:
 # Navigation menu
 header_pages:
   - index.md
+  - blog.md
   - research/index.md
   - projects/index.md
   - teaching/index.md
