@@ -13,6 +13,8 @@ I am a fifth-year Ph.D. student in Mathematics. My advisor is Prof. [Jeffrey Via
 
 You can find my publications on my [Google Scholar](https://scholar.google.com/citations?user=SmrfnssAAAAJ&hl=en) page. 
 
+Here are my social media accounts: [Linkedin](https://www.linkedin.com/in/xiaokang-wang-11080a329/), [X](https://x.com/mathheadkang). Always happy to connect!
+
 I share the same English (Pinyin) name with several other outstanding Chinese researchers, though it seems I am the only one in mathematics research.
 
 ## Research Interests
